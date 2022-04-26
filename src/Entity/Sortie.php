@@ -50,7 +50,7 @@ class Sortie
     private $infosSortie;
 
     /**
-     * @ORM\ManyToOne(targetEntity=etat::class, inversedBy="sortie")
+     * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
      * @ORM\JoinColumn(nullable=false)
      */
     private $etat;
