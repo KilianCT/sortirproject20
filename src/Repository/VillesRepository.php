@@ -2,32 +2,32 @@
 
 namespace App\Repository;
 
-use App\Entity\Villes;
+use App\Entity\Ville;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Villes>
+ * @extends ServiceEntityRepository<Ville>
  *
- * @method Villes|null find($id, $lockMode = null, $lockVersion = null)
- * @method Villes|null findOneBy(array $criteria, array $orderBy = null)
- * @method Villes[]    findAll()
- * @method Villes[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Ville|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Ville|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Ville[]    findAll()
+ * @method Ville[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class VillesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Villes::class);
+        parent::__construct($registry, Ville::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Villes $entity, bool $flush = true): void
+    public function add(Ville $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -39,7 +39,7 @@ class VillesRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Villes $entity, bool $flush = true): void
+    public function remove(Ville $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -48,7 +48,7 @@ class VillesRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return Villes[] Returns an array of Villes objects
+    //  * @return Ville[] Returns an array of Ville objects
     //  */
     /*
     public function findByExampleField($value)
@@ -65,7 +65,7 @@ class VillesRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Villes
+    public function findOneBySomeField($value): ?Ville
     {
         return $this->createQueryBuilder('v')
             ->andWhere('v.exampleField = :val')

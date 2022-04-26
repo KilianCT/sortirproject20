@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=SitesRepository::class)
  */
-class Sites
+class Site
 {
     /**
      * @ORM\Id
@@ -18,7 +18,7 @@ class Sites
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=150, unique="true")
      */
     private $nom_site;
 
