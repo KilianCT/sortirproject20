@@ -77,9 +77,15 @@ class Sortie
      */
     private $participant_no_participant;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="sortie_no_sortie")
+     */
+    private $participants;
+
     public function __construct()
     {
         $this->participant_no_participant = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -227,6 +233,33 @@ class Sortie
     public function removeParticipantNoParticipant(participant $participantNoParticipant): self
     {
         $this->participant_no_participant->removeElement($participantNoParticipant);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participant>
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->addSortieNoSortie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->participants->removeElement($participant)) {
+            $participant->removeSortieNoSortie($this);
+        }
 
         return $this;
     }

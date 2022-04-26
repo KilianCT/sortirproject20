@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SitesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +24,16 @@ class Site
      */
     private $nom_site;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Participant::class, mappedBy="site_no_site")
+     */
+    private $participants;
+
+    public function __construct()
+    {
+        $this->participants = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +47,36 @@ class Site
     public function setNomSite(string $nom_site): self
     {
         $this->nom_site = $nom_site;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participant>
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->setSiteNoSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->participants->removeElement($participant)) {
+            // set the owning side to null (unless already changed)
+            if ($participant->getSiteNoSite() === $this) {
+                $participant->setSiteNoSite(null);
+            }
+        }
 
         return $this;
     }
