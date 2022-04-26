@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Participant;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,7 +14,6 @@ class ParticipantType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('roles')
             ->add('password')
             ->add('pseudo')
             ->add('nom')
@@ -21,10 +21,12 @@ class ParticipantType extends AbstractType
             ->add('telephone')
             ->add('administrateur')
             ->add('actif')
-            ->add('photo_url')
-            ->add('sortie_no_sortie')
-            ->add('site_no_site')
-        ;
+            ->add('photo_url');
+
+            $builder->add('submit', SubmitType::class, [
+                'label' => 'inscription'
+            ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

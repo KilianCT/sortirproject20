@@ -79,7 +79,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="participants")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable="true")
      */
     private $site_no_site;
 
