@@ -5,9 +5,13 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ParticipantType;
 use App\Repository\ParticipantRepository;
+use App\Security\LoginAuthenticator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,13 +32,16 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/new", name="app_participant_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, ParticipantRepository $participantRepository): Response
+    public function new(Request $request, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher ): Response
     {
         $participant = new Participant();
         $form = $this->createForm(ParticipantType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $participant->setAdministrateur(false);
+            $participant->setActif(true);
+            $participant->setPassword($userPasswordHasher->hashPassword($participant, $participant->getPassword()));
             $participantRepository->add($participant);
             return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
         }

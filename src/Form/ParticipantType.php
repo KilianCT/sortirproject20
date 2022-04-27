@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Participant;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,18 +16,25 @@ class ParticipantType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('password')
             ->add('pseudo')
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('administrateur')
-            ->add('actif')
             ->add('photo_url');
+
+          $builder->add('password', RepeatedType::class, [
+            'type' => PasswordType::class,
+            'required' => true,
+            'invalid_message' => 'Les mots de passe ne sont pas identique !',
+            'options' => ['attr' => ['class' => 'password-field']],
+            'first_options'  => ['label' => 'Mot de passe'],
+            'second_options' => ['label' => 'Mot de passe (Confirmation)'],
+        ]);
 
             $builder->add('submit', SubmitType::class, [
                 'label' => 'inscription'
             ]);
+
 
     }
 
