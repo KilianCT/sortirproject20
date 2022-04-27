@@ -6,11 +6,15 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
+ * @UniqueEntity(fields={"pseudo"}, message="Le pseudo est déjà utilisé !")
+ * @UniqueEntity(fields={"email"}, message="L'adresse e-mail est déjà utilisée !")
  */
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -23,6 +27,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="L 'email ' est requis !")
      */
     private $email;
 
@@ -39,16 +44,19 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=150)
+     * @Assert\NotBlank(message="Le pseudo est requis !")
      */
     private $pseudo;
 
     /**
      * @ORM\Column(type="string", length=150)
+     * @Assert\NotBlank(message="Le nom est requis !")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=150)
+     * @Assert\NotBlank(message="Le prenom est requis !")
      */
     private $prenom;
 

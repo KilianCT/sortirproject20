@@ -17,18 +17,25 @@
                         </svg>
                         <span style="font-size: larger; font-weight: bold">S O R T I R</span>
                     </a>
+                    <h2 class="text-white">Bienvenue {% if app.user %}{{ app.user.pseudo }}{%endif%}</h2>
                 </div>
+
+
 
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Menu</h4>
                     <ul class="list-unstyled">
                         <li><a href="{{ path('home') }}" class="text-white">Accueil</a></li>
+                        <br>
+
                         {% if app.user %}
                             <li><a href="{{ path('app_sortie_new') }}" class="text-white">Ajouter une sortie</a></li>
+                            <li><a href="{{ path('app_participant_edit', {'id': app.user.id }) }}" class="text-white">mon profil</a></li>
                         {% endif %}
 
                         <br/>
                         {% if app.user %}
+
 
                             <li><a href="{{ path('app_logout') }}" class="text-white">Se déconnecter</a></li>
                         {% else %}
@@ -42,7 +49,10 @@
         </header>
         {% block main %}
 
+
         {% endblock %}
+
+
     <footer>
         <nav class="navbar navbar-expand-lg navbar-light bg-success fixed-bottom">
             <div class="container-fluid p-3">

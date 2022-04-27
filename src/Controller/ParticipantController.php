@@ -5,14 +5,15 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ParticipantType;
 use App\Repository\ParticipantRepository;
-use App\Security\LoginAuthenticator;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Security\AppUserAuthAuthenticator;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 /**
  * @Route("/participant")
@@ -32,10 +33,11 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/new", name="app_participant_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher ): Response
+    public function new(Request $request, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher , AppUserAuthAuthenticator $authenticator, UserAuthenticatorInterface $userAuthenticator ): Response
     {
+
         $participant = new Participant();
-        $form = $this->createForm(ParticipantType::class, $participant);
+        $form = $this->createForm(ParticipantType::class, $participant,['type' => 'create']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -43,11 +45,15 @@ class ParticipantController extends AbstractController
             $participant->setActif(true);
             $participant->setPassword($userPasswordHasher->hashPassword($participant, $participant->getPassword()));
             $participantRepository->add($participant);
-            return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
+
+
+            return $userAuthenticator->authenticateUser($participant, $authenticator, $request);
+
         }
 
         return $this->renderForm('participant/new.html.twig', [
             'participant' => $participant,
+            'id' => $participant->getId(),
             'form' => $form,
         ]);
     }
@@ -67,18 +73,23 @@ class ParticipantController extends AbstractController
      */
     public function edit(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
     {
-        $form = $this->createForm(ParticipantType::class, $participant);
+        $form = $this->createForm(ParticipantType::class, $participant,['type' => 'edit']);
         $form->handleRequest($request);
+
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $participantRepository->add($participant);
             return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
         }
 
+
+
         return $this->renderForm('participant/edit.html.twig', [
             'participant' => $participant,
             'form' => $form,
         ]);
+
     }
 
     /**

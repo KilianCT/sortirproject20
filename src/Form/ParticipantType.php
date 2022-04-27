@@ -32,7 +32,9 @@ class ParticipantType extends AbstractType
         ]);
 
             $builder->add('submit', SubmitType::class, [
-                'label' => 'inscription'
+
+
+                'label' =>  $options['type'] === 'create' ? 'Créer' : 'Modifier',
             ]);
 
 
@@ -42,6 +44,7 @@ class ParticipantType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Participant::class,
+            'type' => 'create',
         ]);
     }
 }
