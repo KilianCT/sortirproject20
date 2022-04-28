@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Entity\Site;
 use App\Form\ParticipantType;
 use App\Repository\ParticipantRepository;
+use App\Repository\SitesRepository;
 use App\Security\AppUserAuthAuthenticator;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,7 +35,7 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/new", name="app_participant_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher , AppUserAuthAuthenticator $authenticator, UserAuthenticatorInterface $userAuthenticator ): Response
+    public function new(Request $request, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher , AppUserAuthAuthenticator $authenticator, UserAuthenticatorInterface $userAuthenticator, SitesRepository $sitesRepository): Response
     {
 
         $participant = new Participant();
@@ -44,6 +46,8 @@ class ParticipantController extends AbstractController
             $participant->setAdministrateur(false);
             $participant->setActif(true);
             $participant->setPassword($userPasswordHasher->hashPassword($participant, $participant->getPassword()));
+            $idSiteSelected = (int) $request->get('selectSite');
+            $participant->setSiteNoSite($sitesRepository->find($idSiteSelected));
             $participantRepository->add($participant);
 
 
@@ -55,6 +59,7 @@ class ParticipantController extends AbstractController
             'participant' => $participant,
             'id' => $participant->getId(),
             'form' => $form,
+            'sites' => $sitesRepository->findAll(),
         ]);
     }
 

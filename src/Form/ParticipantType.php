@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Participant;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,8 +21,14 @@ class ParticipantType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('photo_url');
+            ->add('photo_url')
+            ->add('site_no_site', ChoiceType::class, [
+                'choices'=> [
+                    'Nantes' => true,
+                    'Angers' => false,
+                    ]
 
+            ]);
 
           $builder->add('password', RepeatedType::class, [
             'type' => PasswordType::class,
