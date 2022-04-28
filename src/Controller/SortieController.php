@@ -4,6 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\EtatRepository;
+use App\Repository\LieuRepository;
+use App\Repository\ParticipantRepository;
+use App\Repository\SitesRepository;
 use App\Repository\SortieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,13 +32,19 @@ class SortieController extends AbstractController
     /**
      * @Route("/new", name="app_sortie_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, SortieRepository $sortieRepository): Response
+    public function new(Request $request, SortieRepository $sortieRepository, SitesRepository $sitesRepository, LieuRepository $lieuRepository, EtatRepository $etatRepository, ParticipantRepository $participantRepository): Response
     {
         $sortie = new Sortie();
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $sortie->setEtat($etatRepository->find(1));
+            $sortie->setOrganisateur($participantRepository->find((int)$request->get('id')));
+            $sortie->setLieuxNoLieux($lieuRepository->find((int)$request->get('selectLieux')));
+            $sortie->setSiteNoSite($sitesRepository->find((int)$request->get('selectSite')));
+
             $sortieRepository->add($sortie);
             return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -42,6 +52,8 @@ class SortieController extends AbstractController
         return $this->renderForm('sortie/new.html.twig', [
             'sortie' => $sortie,
             'form' => $form,
+            'sites' => $sitesRepository->findAll(),
+            'lieux' => $lieuRepository->findAll()
         ]);
     }
 

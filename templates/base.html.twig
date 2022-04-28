@@ -29,7 +29,7 @@
                         <br>
 
                         {% if app.user %}
-                            <li><a href="{{ path('app_sortie_new') }}" class="text-white">Ajouter une sortie</a></li>
+                            <li><a href="{{ path('app_sortie_new')}}?id={{ app.user.id }}" class="text-white">Ajouter une sortie</a></li>
                             <li><a href="{{ path('app_participant_edit', {'id': app.user.id }) }}" class="text-white">mon profil</a></li>
                         {% endif %}
 

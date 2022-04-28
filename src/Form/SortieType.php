@@ -44,32 +44,6 @@ class SortieType extends AbstractType
             'format' => 'yyyy-MM-dd']);
 
 
-
-        $builder->add('id', EntityType::class, [
-            'required' => true,
-            'label' => 'Choisir une lieux',
-            'class' => Lieu::class,
-            'choice_label' => 'rue',
-
-        ]);
-
-
-
-
-
-
-
-
-        $builder->add('submit', SubmitType::class, [
-            'label' => 'Publier la sortie'
-        ]);
-
-
-
-
-
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -2,10 +2,28 @@
 
 {% block title %}New Sortie{% endblock %}
 
-{% block body %}
+{% block main %}
     <h1>Create new Sortie</h1>
 
-    {{ include('sortie/_form.html.twig') }}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
 
+
+    <select name="selectSite" class="form-select" style="margin-top: 15px">
+        {% for site in sites %}
+            <option value="{{ site.getId()}}"> {{ site.getNomSite()}} </option>
+        {% endfor %}
+    </select>
+
+    <select name="selectLieux" class="form-select" style="margin-top: 15px">
+        {% for lieu in lieux %}
+            <option value="{{ lieu.getId()}}"> {{ lieu.getNom()}} </option>
+        {% endfor %}
+    </select>
+
+
+    <br>
+    <button type="submit" class="btn btn-success mt-2">Submit</button>
+    {{ form_end(form) }}
     <a href="{{ path('app_sortie_index') }}">back to list</a>
 {% endblock %}
