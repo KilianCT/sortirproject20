@@ -1,11 +1,82 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Sortie{% endblock %}
+{% block title %}Nouvelle Sortie{% endblock %}
 
-{% block body %}
-    <h1>Create new Sortie</h1>
-
+{% block main %}
+    <h1>Creation d'une nouvelle sortie</h1>
+    <script src="ajax.js" type="text/javascript"></script>
     {{ include('sortie/_form.html.twig') }}
 
-    <a href="{{ path('app_sortie_index') }}">back to list</a>
+    <div class="form-group">
+        <label for="Latitude"> Entrer la latitude </label>
+        <input type="text" placeholder="Entrer la latitude (Optionnel)" name="latitude" id="latitude" class="form-control" >
+        <label for="Longitude"> Entrer la longitude</label>
+        <input type="text" placeholder="Entrer la longitude (Optionnel)" name="longitude" id="latitude" class="form-control" >
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        $(document).on('change', '#sortie_ville', function () {
+
+    /* chargement des lieux de la ville concernée */
+
+    chargerListeLieux();
+
+    })
+
+
+
+    /* fonction permettant de recuperer les lieux en fonction de la ville selectionnée */
+
+    function chargerListeLieux(){
+
+
+
+        $.ajax({
+
+    method: "POST",
+
+    url: "/ajax/rechercheLieuByVille", /* appel de la fonction rechercheLieuByVille du controlleur AjaxController*/
+
+    data: {
+
+    'ville_id' : $('#sortie_ville').val() //recupération de la ville dans la data
+
+    }
+
+    }).done(function (response) {
+
+    $('#sortie_lieu').html(''); //initialisation de la liste des lieux
+
+    //chargement des lieux fournis dans la response, dans la liste deroulante
+
+    for(var i = 0 ; i < response.length ; i++) {
+
+    var lieu = response[i];
+
+    let option = $('<option value="'+lieu["id"]+'">'+lieu["nom"]+'</option>');
+
+    $('#sortie_lieu').append(option);
+
+    }
+
+    })
+
+    }
+
+
+    </script>
+
 {% endblock %}
