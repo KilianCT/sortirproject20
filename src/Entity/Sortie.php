@@ -166,12 +166,12 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?etat
+    public function getIdEtat(): ?etat
     {
         return $this->etat;
     }
 
-    public function setEtat(?etat $etat): self
+    public function setIdEtat(?etat $etat): self
     {
         $this->etat = $etat;
 
