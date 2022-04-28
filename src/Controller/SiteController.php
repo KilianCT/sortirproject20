@@ -75,7 +75,7 @@ class SiteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_site_delete", methods={"POST"})
+     * @Route("/{id}", name="app_site_delete", methods={"POST","GET"})
      */
     public function delete(Request $request, Site $site, SitesRepository $sitesRepository): Response
     {

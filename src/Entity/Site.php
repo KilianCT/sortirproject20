@@ -6,10 +6,13 @@ use App\Repository\SitesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=SitesRepository::class)
+ * @UniqueEntity(fields={"nom_site"}, message="Cette ville est deja enregistré !")
  */
+
 class Site
 {
     /**
