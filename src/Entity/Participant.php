@@ -91,6 +91,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $site_no_site;
 
+
+
     public function __construct()
     {
         $this->sortie_no_sortie = new ArrayCollection();
@@ -301,6 +303,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSiteNoSite(?Site $site_no_site): self
     {
         $this->site_no_site = $site_no_site;
+
+        return $this;
+    }
+
+    public function getVilleRattachement(): ?string
+    {
+        return $this->ville_rattachement;
+    }
+
+    public function setVilleRattachement(string $ville_rattachement): self
+    {
+        $this->ville_rattachement = $ville_rattachement;
 
         return $this;
     }
