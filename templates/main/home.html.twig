@@ -3,7 +3,56 @@
 {% block title %}Home{% endblock %}
 
  {% block main %}
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet, cumque dolor eius esse et labore laborum molestias numquam quas quo. Blanditiis cum earum excepturi hic illo ipsum nesciunt quas repudiandae rerum totam? Ad animi at cum dolores ea eligendi exercitationem explicabo iste, placeat recusandae reprehenderit sapiente tempora, totam ullam, voluptatum! Assumenda doloremque eos error harum hic iste itaque laboriosam maiores natus quae quia, quis ut vel. Dolorum eos maiores nobis repellendus. Consectetur dolore earum excepturi hic quas ratione, reiciendis vitae. Ab ad delectus dicta dolore doloremque dolores doloribus, dolorum eum facilis harum hic illo in ipsam neque nisi, numquam odit perspiciatis placeat porro praesentium repellendus similique vel voluptas. Aspernatur blanditiis culpa cumque delectus deserunt doloribus esse eum, expedita fugiat illo in incidunt laborum molestiae molestias neque porro quibusdam similique suscipit voluptas voluptate? Aperiam deleniti distinctio ea enim hic ipsam minus nihil omnis, pariatur quibusdam, quis ratione repudiandae ullam velit veniam. A aperiam autem doloremque enim fuga, nesciunt numquam obcaecati, quod sapiente sequi unde veritatis! Consectetur consequatur cum cumque eos et, fuga laudantium natus nesciunt nostrum perspiciatis repellendus sunt voluptatibus. Adipisci eaque earum est, explicabo hic id ratione sint? Aliquam architecto consequuntur cupiditate ea maxime nulla perferendis quae quibusdam? Fuga, voluptate!
+{% if app.user %}
+     <table class="table">
+         <thead>
+         <tr>
+             <th>nom</th>
+             <th>date sortie</th>
+             <th>Date de cloture</th>
+             <th>nombre d'inscription</th>
+             <th>Etat</th>
+             <th>Inscrit</th>
+             <th>Organisateur</th>
+             <th>actions</th>
+         </tr>
+         </thead>
+         <tbody>
+
+         {% for sortie in sorties %}
+             {% if (app.user and sortie.getIdEtat().id != 1) or (app.user and sortie.getIdEtat().id == 1 and app.user.id == sortie.organisateur.id) %}
+             <tr>
+
+                 <td>{{ sortie.nom }}</td>
+                 <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i:s') : '' }}</td>
+                 <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d ') : '' }}</td>
+                 <td>{{ sortie.nbInscriptionMax }}</td>
+                 <td>{{ sortie.getIdEtat().getLibelle() }}</td>
+                 <td>Inscrit</td>
+                 <td>{{ sortie.organisateur.nom }}</td>
+                 <td>
+                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
+                     <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">edit</a>
+                     {%  endif %}
+                     {% if app.user and sortie.getIdEtat().id != 2 %}
+                         <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}">s'inscrire</a>
+                     {%  endif %}
+
+                     {% if app.user and sortie.getIdEtat().id != 1 %}
+                     <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">show</a>
+                     {%  endif %}
+                 </td>
+             </tr>
+         {% else %}
+
+             {%  endif %}
+         {% endfor %}
+
+         </tbody>
+     </table>
+{% else %}
+     <h1>Pour voir les sorties en cours veuillez vous connecter</h1>
+{% endif%}
  {% endblock %}
 
 
