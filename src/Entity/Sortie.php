@@ -215,6 +215,7 @@ class Sortie
     }
 
     /**
+     *
      * @return Collection<int, participant>
      */
     public function getParticipantNoParticipant(): Collection

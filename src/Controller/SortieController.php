@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+
+
 use App\Entity\Sortie;
 use App\Form\SortieType;
 use App\Repository\EtatRepository;
@@ -9,6 +11,9 @@ use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SitesRepository;
 use App\Repository\SortieRepository;
+
+use Doctrine\ORM\EntityManager;
+use Proxies\__CG__\App\Entity\Participant;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,13 +45,13 @@ class SortieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $sortie->setEtat($etatRepository->find(1));
+            $sortie->setIdEtat(($etatRepository->find(1)));
             $sortie->setOrganisateur($participantRepository->find((int)$request->get('id')));
             $sortie->setLieuxNoLieux($lieuRepository->find((int)$request->get('selectLieux')));
             $sortie->setSiteNoSite($sitesRepository->find((int)$request->get('selectSite')));
 
             $sortieRepository->add($sortie);
-            return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('sortie/new.html.twig', [
@@ -97,4 +102,28 @@ class SortieController extends AbstractController
 
         return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    /**
+     * @Route("/inscription/{idSortie}/{idParticipant}", name="app_sortie_inscription",methods={"GET", "POST"})
+     *
+     */
+    public function inscription(Request $request, SortieRepository $sortieRepository, EntityManager $em): Response
+    {
+
+
+        $sortie = $sortieRepository->find((int)$request->get('idSortie'));
+        $participant = $em->getRepository('AppBundle:Participant')->find($request->get('idParticipant'));
+
+        dd($sortie,$participant);
+
+
+        $sortie->addParticipant($participant);
+        $sortie->addParticipantNoParticipant($participant);
+
+
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+    }
+
+
 }
