@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Controller;
-
-
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\SortieType;
@@ -12,7 +10,9 @@ use App\Repository\ParticipantRepository;
 use App\Repository\SitesRepository;
 use App\Repository\SortieRepository;
 
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -107,22 +107,19 @@ class SortieController extends AbstractController
      * @Route("/inscription/{idSortie}/{idParticipant}", name="app_sortie_inscription",methods={"GET", "POST"})
      *
      */
-    public function inscription(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository ): Response
+    public function inscription(ManagerRegistry $doctrine, Request $request, SortieRepository $sortieRepository): Response
     {
 
 
         $sortie = $sortieRepository->find((int)$request->get('idSortie'));
-        $participant = $participantRepository->find($request->get('idParticipant'));
-
-        dd($sortie,$participant);
-
-
-        $sortie->addParticipant($participant);
+        $participant = $doctrine->getRepository(Participant::class)->find((int)($request->get('idParticipant')));
         $sortie->addParticipantNoParticipant($participant);
-
+        $sortie->addParticipant($participant);
+        $sortieRepository->add($sortie);
 
         return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
+
 
 
 }

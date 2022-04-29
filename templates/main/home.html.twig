@@ -35,7 +35,7 @@
                      <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">edit</a>
                      {%  endif %}
                      {% if app.user and sortie.getIdEtat().id != 2 %}
-                         <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}">s'inscrire</a>
+                         <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.getId() , 'idParticipant': app.user.getId()}) }}">s'inscrire</a>
                      {%  endif %}
 
                      {% if app.user and sortie.getIdEtat().id != 1 %}
