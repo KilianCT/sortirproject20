@@ -38,7 +38,32 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_sortie_index') }}">back to list</a>
+
+
+    {%  set participants = sortie.getParticipants()  %}
+
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Pseudo</th>
+                <th>Nom</th>
+            </tr>
+            <tr>
+                <th>Organisateur: {{sortie.getOrganisateur().pseudo }}</th>
+                <th>{{sortie.getOrganisateur().nom }} {{sortie.getOrganisateur().prenom }}</th>
+            </tr>
+
+    {% for participant in participants %}
+            <tr>
+                <td>{{ participant.pseudo }}</td>
+                <td>{{ participant.nom }} {{ participant.prenom }}</td>
+            </tr>
+    {% endfor %}
+            </tbody>
+        </table>
+
+    <a href="{{ path('home') }}">back to list</a>
 
     <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">edit</a>
 
