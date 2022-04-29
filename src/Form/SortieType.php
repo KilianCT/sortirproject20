@@ -13,6 +13,7 @@ use App\Entity\Sortie;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -33,15 +34,18 @@ class SortieType extends AbstractType
             ->add('infosSortie');
 
 
-        $builder->add('dateHeureDebut', DateType::class, [
-            'widget' => 'single_text',
+        $builder->add('dateHeureDebut', DateTimeType::class, [
+            'date_label' => 'Starts On'
             // this is actually the default format for single_text
-            'format' => 'yyyy-MM-dd']);
+            //'format' => 'yyyy-MM-dd H:i:s'
+        ]);
 
-        $builder->add('dateLimiteInscription', DateType::class, [
-            'widget' => 'single_text',
+        $builder->add('dateLimiteInscription', DateTimeType::class, [
+            'date_label' => 'Starts On'
+            //'widget' => 'single_text',
             // this is actually the default format for single_text
-            'format' => 'yyyy-MM-dd']);
+            //'format' => 'yyyy-MM-dd'
+        ]);
 
 
     }
