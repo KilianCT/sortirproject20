@@ -32,9 +32,26 @@
                  <td>{{ sortie.organisateur.nom }}</td>
                  <td>
                      {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
-                     <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">edit</a>
+                     <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">modifier</a>
                      {%  endif %}
-                     {% if app.user and sortie.getIdEtat().id != 2 %}
+
+                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
+
+                         <form method="post" action="{{ path('app_sortie_publier', {'idSortie': sortie.id}) }}" onsubmit="return confirm('voulez vous publier votre sortie');">
+                             <input type="hidden">
+                             <button class="btn">publier</button>
+
+                         </form>
+
+
+                     {%  endif %}
+
+                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 2 %}
+                         {{ include('sortie/_delete_form.html.twig') }}
+                     {%  endif %}
+
+
+                     {% if app.user and sortie.getIdEtat().id == 2 and sortie.organisateur.id != app.user.id  %}
                          <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}">s'inscrire</a>
                      {%  endif %}
 

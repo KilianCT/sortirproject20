@@ -99,7 +99,7 @@ class SortieController extends AbstractController
             $sortieRepository->remove($sortie);
         }
 
-        return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
 
 
@@ -123,5 +123,19 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @Route("/publier/{idSortie}", name="app_sortie_publier",methods={"GET", "POST"})
+     *
+     */
+        public function publier(Request $request, SortieRepository $sortieRepository, EtatRepository $etatRepository) {
+
+
+            $sortie = $sortieRepository->find((int)$request->get('idSortie'));
+
+            $sortie->setIdEtat($etatRepository->find(2));
+            $sortieRepository->add($sortie);
+
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+        }
 
 }
