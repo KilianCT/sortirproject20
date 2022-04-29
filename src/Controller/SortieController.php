@@ -66,8 +66,12 @@ class SortieController extends AbstractController
      */
     public function show(Sortie $sortie): Response
     {
+
+
+
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
+
         ]);
     }
 
@@ -113,11 +117,12 @@ class SortieController extends AbstractController
 
         $sortie = $sortieRepository->find((int)$request->get('idSortie'));
         $participant = $participantRepository->find($request->get('idParticipant'));
-        dd($sortie,$participant);
-
 
         $sortie->addParticipant($participant);
         $sortie->addParticipantNoParticipant($participant);
+
+        $sortieRepository->add($sortie);
+
 
 
         return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
@@ -137,5 +142,28 @@ class SortieController extends AbstractController
 
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
+
+
+
+    /**
+     * @Route("/desinscription/{idSortie}/{idParticipant}", name="app_sortie_desinscription",methods={"GET", "POST"})
+     *
+     */
+    public function desinscription(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository): Response
+    {
+
+
+        $sortie = $sortieRepository->find((int)$request->get('idSortie'));
+        $participant = $participantRepository->find($request->get('idParticipant'));
+
+        $sortie->removeParticipant($participant);
+        $sortie->removeParticipantNoParticipant($participant);
+
+        $sortieRepository->add($sortie);
+
+
+
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+    }
 
 }

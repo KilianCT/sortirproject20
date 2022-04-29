@@ -51,8 +51,24 @@
                      {%  endif %}
 
 
-                     {% if app.user and sortie.getIdEtat().id == 2 and sortie.organisateur.id != app.user.id  %}
-                         <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}">s'inscrire</a>
+                     {% if app.user and (sortie.getIdEtat().id == 2 or sortie.getIdEtat().id == 3) and sortie.organisateur.id != app.user.id  %}
+
+                         {%  set participants = sortie.getParticipants()  %}
+                         {%  set isContain = false  %}
+                         {% for participant in participants %}
+                             {%if app.user == participant %}
+                                 {%  set isContain = true  %}
+                             {%  endif %}
+                         {% endfor %}
+                         {%  if isContain%}
+                             <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('voulez vous vraiment vous desincrire')";>se desincrire</a>
+                             {% else %}
+                                 {% if sortie.getIdEtat().id == 2 %}
+                                 <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";>s'inscrire</a>
+                             {% endif %}
+                         {% endif %}
+
+
                      {%  endif %}
 
                      {% if app.user and sortie.getIdEtat().id != 1 %}
