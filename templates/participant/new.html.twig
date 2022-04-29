@@ -8,12 +8,6 @@
     {% form_theme form 'bootstrap_4_layout.html.twig' %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
-
-            <select name="selectSite" class="form-select" style="margin-top: 15px">
-            {% for site in sites %}
-                <option value="{{ site.getId()}}"> {{ site.getNomSite()}} </option>
-            {% endfor %}
-            </select>
             <br>
             <button type="submit" class="btn btn-success mt-2">Créer</button>
         {{ form_end(form) }}

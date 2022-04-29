@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Participant;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -22,13 +23,20 @@ class ParticipantType extends AbstractType
             ->add('prenom')
             ->add('telephone')
             ->add('photo_url')
-            ->add('site_no_site', ChoiceType::class, [
-                'choices'=> [
-                    'Nantes' => true,
-                    'Angers' => false,
-                    ]
+            ->add('site', entityType::class,[
+
+                    'class' => 'App\Entity\Site',
+
+                    'mapped' => false,
+
+                    'choice_label' => 'nom_site',
+
+                    'placeholder' => 'Selectionner une ville',
+
+                    'required' => false
 
             ]);
+
 
           $builder->add('password', RepeatedType::class, [
             'type' => PasswordType::class,
@@ -39,11 +47,7 @@ class ParticipantType extends AbstractType
             'second_options' => ['label' => 'Mot de passe (Confirmation)'],
         ]);
 
-            $builder->add('submit', SubmitType::class, [
 
-
-                'label' =>  $options['type'] === 'create' ? 'Créer' : 'Modifier',
-            ]);
 
 
     }

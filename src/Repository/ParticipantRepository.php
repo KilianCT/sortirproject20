@@ -81,7 +81,7 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
     }
     */
 
-    /*
+
     public function findOneBySomeField($value): ?Participant
     {
         return $this->createQueryBuilder('p')
@@ -91,5 +91,5 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

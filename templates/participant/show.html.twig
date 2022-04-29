@@ -54,9 +54,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_participant_index') }}">back to list</a>
+    <a href="{{ path('app_participant_index') }}">retour a la liste</a>
 
-    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
-
-    {{ include('participant/_delete_form.html.twig') }}
 {% endblock %}

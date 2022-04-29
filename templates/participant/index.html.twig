@@ -3,6 +3,7 @@
 {% block title %}Participant index{% endblock %}
 
 {% block main %}
+    <div class="container">
     <h1>Participant index</h1>
 
     <table class="table">
@@ -37,8 +38,10 @@
                 <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
                 <td>{{ participant.photoUrl }}</td>
                 <td>
-                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}">show</a>
-                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
+                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}">Détails</a>
+                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">modifier</a>
+                    {{ include('participant/_delete_form.html.twig') }}
+
                 </td>
             </tr>
         {% else %}
@@ -50,4 +53,6 @@
     </table>
 
     <a href="{{ path('app_participant_new') }}">Create new</a>
+
+    </div>
 {% endblock %}

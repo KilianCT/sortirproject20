@@ -27,10 +27,10 @@
                     <ul class="list-unstyled">
                         <li><a href="{{ path('home') }}" class="text-white">Accueil</a></li>
                         <br>
-                        {% if app.user %}
+                        {% if app.user and  app.user.getAdministrateur() %}
                             <li><a href="{{ path('app_site_index') }}" class="text-white">Sites</a></li>
                             <li><a href="{{ path('app_ville_index') }}" class="text-white">Villes</a></li>
-                            <li><a href="{{ path('app_participant_show', {'id': app.user.id }) }}" class="text-white">Ajouter des droit administrateur</a></li>
+                            <li><a href="{{ path('app_participant_index') }}" class="text-white">gérer utilisateur</a></li>
                         {% endif %}
                         <br>
 
@@ -39,7 +39,7 @@
 
 
                         {% if app.user %}
-                            <li><a href="{{ path('app_sortie_new') }}" class="text-white">Ajouter une sortie</a></li>
+                            <li><a href="{{ path('app_sortie_new', {'id': app.user.id }) }}" class="text-white">Ajouter une sortie</a></li>
                             <li><a href="{{ path('app_participant_edit', {'id': app.user.id }) }}" class="text-white">mon profil</a></li>
                         {% endif %}
 
