@@ -12,8 +12,7 @@ use App\Repository\ParticipantRepository;
 use App\Repository\SitesRepository;
 use App\Repository\SortieRepository;
 
-use Doctrine\ORM\EntityManager;
-use Proxies\__CG__\App\Entity\Participant;
+use App\Entity\Participant;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,13 +107,12 @@ class SortieController extends AbstractController
      * @Route("/inscription/{idSortie}/{idParticipant}", name="app_sortie_inscription",methods={"GET", "POST"})
      *
      */
-    public function inscription(Request $request, SortieRepository $sortieRepository, EntityManager $em): Response
+    public function inscription(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository): Response
     {
 
 
         $sortie = $sortieRepository->find((int)$request->get('idSortie'));
-        $participant = $em->getRepository('AppBundle:Participant')->find($request->get('idParticipant'));
-
+        $participant = $participantRepository->find($request->get('idParticipant'));
         dd($sortie,$participant);
 
 
