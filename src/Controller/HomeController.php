@@ -20,6 +20,7 @@ class HomeController  extends AbstractController
 
 
 
+
         return $this->render('main/home.html.twig', [
             'sorties' => $sortieRepository->findAll(),
             'sites' => $sitesRepository->findAll(),

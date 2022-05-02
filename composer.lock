@@ -1448,16 +1448,16 @@
         },
         {
             "name": "friendsofphp/proxy-manager-lts",
-            "version": "v1.0.8",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/proxy-manager-lts.git",
-                "reference": "581ab35f83ce2135057e0afae892fbf1c583bfb9"
+                "reference": "88dda72c48633326c81a01b861c8b6a923948f56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/proxy-manager-lts/zipball/581ab35f83ce2135057e0afae892fbf1c583bfb9",
-                "reference": "581ab35f83ce2135057e0afae892fbf1c583bfb9",
+                "url": "https://api.github.com/repos/FriendsOfPHP/proxy-manager-lts/zipball/88dda72c48633326c81a01b861c8b6a923948f56",
+                "reference": "88dda72c48633326c81a01b861c8b6a923948f56",
                 "shasum": ""
             },
             "require": {
@@ -1514,7 +1514,7 @@
             ],
             "support": {
                 "issues": "https://github.com/FriendsOfPHP/proxy-manager-lts/issues",
-                "source": "https://github.com/FriendsOfPHP/proxy-manager-lts/tree/v1.0.8"
+                "source": "https://github.com/FriendsOfPHP/proxy-manager-lts/tree/v1.0.10"
             },
             "funding": [
                 {
@@ -1526,7 +1526,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-28T20:30:12+00:00"
+            "time": "2022-05-01T10:41:21+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -3565,16 +3565,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.18.6",
+            "version": "v1.18.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "130851b90c1ea615ac5be6fce827971f4f55afbf"
+                "reference": "e74319d17ed4edc5f27b9d24757e172930a7ebc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/130851b90c1ea615ac5be6fce827971f4f55afbf",
-                "reference": "130851b90c1ea615ac5be6fce827971f4f55afbf",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/e74319d17ed4edc5f27b9d24757e172930a7ebc4",
+                "reference": "e74319d17ed4edc5f27b9d24757e172930a7ebc4",
                 "shasum": ""
             },
             "require": {
@@ -3610,7 +3610,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.18.6"
+                "source": "https://github.com/symfony/flex/tree/v1.18.7"
             },
             "funding": [
                 {
@@ -3626,7 +3626,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-15T08:20:34+00:00"
+            "time": "2022-05-02T10:18:23+00:00"
         },
         {
             "name": "symfony/form",
