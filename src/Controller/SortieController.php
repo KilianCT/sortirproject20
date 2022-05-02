@@ -24,6 +24,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SortieController extends AbstractController
 {
+
+
+
     /**
      * @Route("/", name="app_sortie_index", methods={"GET"})
      */
@@ -116,18 +119,26 @@ class SortieController extends AbstractController
     {
 
 
+
         $sortie = $sortieRepository->find((int)$request->get('idSortie'));
+
         $participant = $participantRepository->find($request->get('idParticipant'));
 
+
         $sortie->addParticipant($participant);
+
+
         $sortie->addParticipantNoParticipant($participant);
 
         $sortieRepository->add($sortie);
 
 
 
-        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER );
     }
+
+
 
     /**
      * @Route("/publier/{idSortie}", name="app_sortie_publier",methods={"GET", "POST"})
@@ -154,6 +165,7 @@ class SortieController extends AbstractController
     {
 
 
+
         $sortie = $sortieRepository->find((int)$request->get('idSortie'));
         $participant = $participantRepository->find($request->get('idParticipant'));
 
@@ -169,12 +181,12 @@ class SortieController extends AbstractController
 
 
     /**
-     * @Route("/recherche", name="app_sortie_recherche",methods={"GET", "POST"})
+     * @Route("/recherche", name="app_sortie_recherche",methods={"GET"})
      *
      */
     public function recherche(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository, SitesRepository $sitesRepository, Site $site): Response
     {
-
+    
        $site = $sitesRepository->find((int)$request->get('selectSite'));
        $dateDebut = $request->get('dateDebut');
        $dateFin = $request->get('dateFin');

@@ -5,7 +5,7 @@
  {% block main %}
      <h1>filtrer les sorties</h1>
 
-     <form action="{{ path('app_sortie_recherche') }}" method="POST">
+     <form action="{{ path('app_sortie_recherche') }}" method="GET">
 
              <select name="selectSite" class="form-select" style="margin-top: 15px">
                  {% for site in sites %}
@@ -40,30 +40,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {% if app.user %}
      <table class="table">
          <thead>
@@ -93,8 +69,10 @@
                  <td>{{ sortie.nom }}</td>
                  <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i:s') : '' }}</td>
                  <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d ') : '' }}</td>
-                 <td>{{ sortie.nbInscriptionMax }}</td>
-                 <td>{{ sortie.getIdEtat().getLibelle() }}</td>
+
+                {% set tabPart = sortie.getParticipants() %}
+                 <td> {{tabPart|length}}/{{ sortie.nbInscriptionMax }}</td>
+                 <td>{{sortie.getIdEtat().getLibelle() }}</td>
                  <td>Inscrit</td>
                  <td>{{ sortie.organisateur.nom }}</td>
                  <td>
@@ -130,7 +108,7 @@
                          {%  if isContain%}
                              <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('voulez vous vraiment vous desincrire')";>se desincrire</a>
                              {% else %}
-                                 {% if sortie.getIdEtat().id == 2 %}
+                                 {% if sortie.getIdEtat().id == 2 and tabPart|length <= sortie.nbInscriptionMax %}
                                  <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";>s'inscrire</a>
                              {% endif %}
                          {% endif %}
