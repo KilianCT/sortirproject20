@@ -24,7 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SortieController extends AbstractController
 {
-    private $nombreParticipant =0;
     /**
      * @Route("/", name="app_sortie_index", methods={"GET"})
      */
@@ -87,7 +86,7 @@ class SortieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sortieRepository->add($sortie);
-            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('sortie/edit.html.twig', [
@@ -113,10 +112,8 @@ class SortieController extends AbstractController
      * @Route("/inscription/{idSortie}/{idParticipant}", name="app_sortie_inscription",methods={"GET", "POST"})
      *
      */
-    public function inscription(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository, SitesRepository $sitesRepository): Response
+    public function inscription(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository): Response
     {
-
-
 
 
         $sortie = $sortieRepository->find((int)$request->get('idSortie'));
@@ -127,18 +124,11 @@ class SortieController extends AbstractController
 
         $sortieRepository->add($sortie);
 
-        $nombreParticipant = 0;
 
 
-        return $this->render('main/home.html.twig', [
-            'sorties' => $sortieRepository->findAll(),
-            'sites' => $sitesRepository->findAll(),
-            'nombreParticipant' => $nombreParticipant,
 
-        ]);
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER );
     }
-
-
 
     /**
      * @Route("/publier/{idSortie}", name="app_sortie_publier",methods={"GET", "POST"})
@@ -161,7 +151,7 @@ class SortieController extends AbstractController
      * @Route("/desinscription/{idSortie}/{idParticipant}", name="app_sortie_desinscription",methods={"GET", "POST"})
      *
      */
-    public function desinscription(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository, SitesRepository $sitesRepository): Response
+    public function desinscription(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository): Response
     {
 
 
@@ -174,13 +164,8 @@ class SortieController extends AbstractController
         $sortieRepository->add($sortie);
 
 
-        $nombreParticipant =0;
-        return $this->render('main/home.html.twig', [
-            'sorties' => $sortieRepository->findAll(),
-            'sites' => $sitesRepository->findAll(),
-            'nombreParticipant' => $nombreParticipant,
 
-        ]);
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
 
 

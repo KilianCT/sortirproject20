@@ -112,5 +112,24 @@ class ParticipantController extends AbstractController
 
 
 
+    /**
+     * @Route("Admin/{id}", name="app_participant_devenirAdmin", methods={"GET", "POST"})
+     */
+    public function devenirAdmin(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
+    {
+            $participant = $participantRepository->find($request->get('id'));
+            $participant->setAdministrateur(true);
+            $participantRepository->add($participant);
+
+
+        return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+
+
+
+
+
 
 }
