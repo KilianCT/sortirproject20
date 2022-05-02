@@ -3,6 +3,67 @@
 {% block title %}Home{% endblock %}
 
  {% block main %}
+     <h1>filtrer les sorties</h1>
+
+     <form action="{{ path('app_sortie_recherche') }}" method="POST">
+
+             <select name="selectSite" class="form-select" style="margin-top: 15px">
+                 {% for site in sites %}
+                     <option value="{{ site.getId()}}"> {{ site.getNomSite()}} </option>
+                 {% endfor %}
+             </select>
+         <br>
+
+          <input type=text" placeholder="recherche" name="recherche">
+         <br>
+         <br>
+          <p>Entre<input type="date" name="dateDebut"> et <input type="date" name="dateFin"></p>
+         <br>
+         <input type="checkbox" name="orga"  >
+         <label>Sorties dont je suis Organisateur/trice</label>
+         <br>
+         <input type="checkbox" name="participantInscrit"   >
+         <label>Sorties ou je suis inscrit</label>
+         <br>
+         <input type="checkbox" name="participantPasInscrit"   >
+         <label>Sorties ou je ne suis pas inscrit</label>
+         <br>
+         <input type="checkbox" name="sortieFermee"   >
+         <label>Sortie passée</label>
+         <br>
+
+        <button type="submit">Rechercher</button>
+
+     </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% if app.user %}
      <table class="table">
          <thead>
@@ -18,6 +79,12 @@
          </tr>
          </thead>
          <tbody>
+
+
+
+
+
+
 
          {% for sortie in sorties %}
              {% if (app.user and sortie.getIdEtat().id != 1) or (app.user and sortie.getIdEtat().id == 1 and app.user.id == sortie.organisateur.id) %}
@@ -72,7 +139,7 @@
                      {%  endif %}
 
                      {% if app.user and sortie.getIdEtat().id != 1 %}
-                     <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">show</a>
+                     <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">afficher</a>
                      {%  endif %}
                  </td>
              </tr>

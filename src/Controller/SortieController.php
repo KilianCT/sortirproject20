@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 
+use App\Entity\Site;
 use App\Entity\Sortie;
 use App\Form\SortieType;
 use App\Repository\EtatRepository;
@@ -166,4 +167,28 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
 
-}
+
+    /**
+     * @Route("/recherche", name="app_sortie_recherche",methods={"GET", "POST"})
+     *
+     */
+    public function recherche(Request $request, SortieRepository $sortieRepository, ParticipantRepository $participantRepository, SitesRepository $sitesRepository, Site $site): Response
+    {
+
+       $site = $sitesRepository->find((int)$request->get('selectSite'));
+       $dateDebut = $request->get('dateDebut');
+       $dateFin = $request->get('dateFin');
+       $recherche  = $request->get('recherche');
+
+
+        return $this->render('main/home.html.twig', [
+            'site' => $site,
+            'dateDebut'=>$dateDebut,
+            'dateFin'=>$dateFin,
+            'recherche'=> $recherche,
+
+        ]);
+    }
+
+
+    }
