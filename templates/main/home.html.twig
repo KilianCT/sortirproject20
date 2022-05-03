@@ -3,6 +3,7 @@
 {% block title %}Home{% endblock %}
 
  {% block main %}
+     {% if app.user %}
      <h1>filtrer les sorties</h1>
 
      <form action="{{ path('app_sortie_recherche') }}" method="POST">
@@ -64,7 +65,7 @@
 
 
 
-{% if app.user %}
+
      <table class="table">
          <thead>
          <tr>
@@ -73,7 +74,7 @@
              <th>Date de cloture</th>
              <th>nombre d'inscription</th>
              <th>Etat</th>
-             <th>Inscrit</th>
+             <th>Inscrit </th>
              <th>Organisateur</th>
              <th>actions</th>
          </tr>
@@ -97,10 +98,26 @@
                 {% set tabPart = sortie.getParticipants() %}
                  <td> {{tabPart|length}}/{{ sortie.nbInscriptionMax }}</td>
                  <td>{{sortie.getIdEtat().getLibelle() }}</td>
-                 <td>Inscrit</td>
+                 {%  set participants = sortie.getParticipants()  %}
+                 {%  set isContain = false  %}
+                 {% for participant in participants %}
+                     {%if app.user.id == participant.id %}
+                         {%  set isContain = true  %}
+                     {%  endif %}
+                 {% endfor %}
+                 <td> {% if isContain == true  and sortie.getIdEtat().id < 4%}
+                         ✓
+                        {% else %}
+                            X
+
+                            {% endif %}
+                </td>
                  <td>
-                    {% if app.user and sortie.getIdEtat().id == 4 and app.user.id != sortie.organisateur.id %}
-                        <a href="{{ path('app_participant_show', {'id': sortie.id}) }}">{{ sortie.organisateur.nom }}</a>
+
+
+
+                    {% if app.user and sortie.getIdEtat().id == 3 and app.user.id != sortie.organisateur.id  and isContain == true %}
+                        <a href="{{path('app_participant_show',{'id': sortie.organisateur.id } )}}">{{ sortie.organisateur.nom }}</a>
                     {% else %}
                         {{ sortie.organisateur.nom }}
                     {% endif %}
@@ -122,12 +139,22 @@
 
                      {%  endif %}
 
-                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 2 %}
+                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
                          {{ include('sortie/_delete_form.html.twig') }}
                      {%  endif %}
 
+                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 2 %}
+                         <form method="post" action="{{ path('app_sortie_Annuler', {'idSortie': sortie.id}) }}">
+                             <input type="hidden">
+                             <button class="btn">Annuler</button>
+                         </form>
+                     {%  endif %}
 
-                     {% if app.user and (sortie.getIdEtat().id == 2 or sortie.getIdEtat().id == 3) and sortie.organisateur.id != app.user.id  %}
+
+
+
+
+                     {% if app.user and (sortie.getIdEtat().id == 2 or sortie.getIdEtat().id == 3) and sortie.organisateur.id != app.user.id   %}
 
                          {%  set participants = sortie.getParticipants()  %}
                          {%  set isContain = false  %}
@@ -137,9 +164,11 @@
                              {%  endif %}
                          {% endfor %}
                          {%  if isContain%}
-                             <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('voulez vous vraiment vous desincrire')";>se desincrire</a>
+
+                             <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return  confirm('voulez vous vraiment vous desincrire ? ')";>se desincrire</a>
                              {% else %}
                                  {% if sortie.getIdEtat().id == 2 %}
+
                                  <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";>s'inscrire</a>
                              {% endif %}
                          {% endif %}

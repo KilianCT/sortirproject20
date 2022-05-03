@@ -7,21 +7,16 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ participant.id }}</td>
-            </tr>
+
             <tr>
                 <th>Email</th>
                 <td>{{ participant.email }}</td>
             </tr>
             <tr>
-                <th>Roles</th>
-                <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
+                {% if app.user.id == participant.id %}
                 <th>Password</th>
                 <td>{{ participant.password }}</td>
+                {% endif %}
             </tr>
             <tr>
                 <th>Pseudo</th>
@@ -40,20 +35,26 @@
                 <td>{{ participant.telephone }}</td>
             </tr>
             <tr>
+                {% if app.user.id == participant.id %}
                 <th>Administrateur</th>
                 <td>{{ participant.administrateur ? 'Yes' : 'No' }}</td>
             </tr>
+            {% endif %}
             <tr>
+                {% if app.user.id == participant.id %}
                 <th>Actif</th>
                 <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
             </tr>
+            {% endif %}
             <tr>
+                {% if app.user.id == participant.id %}
                 <th>Photo_url</th>
                 <td>{{ participant.photoUrl }}</td>
             </tr>
+            {% endif %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_participant_index') }}">retour a la liste</a>
+    <a href="{{ path('home') }}">retour sur l'accueil</a>
 
 {% endblock %}
