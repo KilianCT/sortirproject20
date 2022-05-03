@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Participant;
+use App\Repository\ParticipantRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,6 +17,7 @@ class ParticipantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if($options['type'] === 'create' ||$options['type'] === 'edit') {
         $builder
             ->add('email')
             ->add('pseudo')
@@ -36,21 +38,32 @@ class ParticipantType extends AbstractType
                     'required' => false
 
             ]);
-
-
+        }
+            if($options['type'] === 'create' || $options['type'] === 'passwordEdit') {
           $builder->add('password', RepeatedType::class, [
             'type' => PasswordType::class,
-            'required' => true,
+            'required' => false,
             'invalid_message' => 'Les mots de passe ne sont pas identique !',
             'options' => ['attr' => ['class' => 'password-field']],
             'first_options'  => ['label' => 'Mot de passe'],
             'second_options' => ['label' => 'Mot de passe (Confirmation)'],
-        ]);
+
+          ]);
+            }
+          if($options['type'] === 'passwordEdit') {
+              $builder->add('passwordEdit', PasswordType::class, [
+                'label'=> ' nouveau mot de passe'
+              ]);
+          }
+
+
+
 
 
 
 
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {

@@ -76,7 +76,7 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_participant_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
+    public function edit(Request $request, Participant $participant, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $form = $this->createForm(ParticipantType::class, $participant,['type' => 'edit']);
         $form->handleRequest($request);
@@ -84,6 +84,7 @@ class ParticipantController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $participant->setPassword($userPasswordHasher->hashPassword($participant, $participant->getPassword()));
             $participantRepository->add($participant);
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
@@ -94,6 +95,7 @@ class ParticipantController extends AbstractController
         return $this->renderForm('participant/edit.html.twig', [
             'participant' => $participant,
             'form' => $form,
+            'var' => true,
         ]);
 
     }
@@ -125,7 +127,34 @@ class ParticipantController extends AbstractController
         return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @Route("/{id}/reset_password", name="app_reset_password", methods={"GET", "POST"})
+     */
 
+    public function editPassword(Request $request, Participant $participant, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher){
+
+        $form = $this->createForm(ParticipantType::class, $participant,['type' => 'passwordEdit']);
+        $form->handleRequest($request);
+
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $participant->setPassword($userPasswordHasher->hashPassword($participant, $participant->getPassword()));
+            $participantRepository->add($participant);
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+        }
+
+
+
+        return $this->renderForm('participant/edit.html.twig', [
+            'participant' => $participant,
+            'form' => $form,
+            'var' => false,
+
+        ]);
+
+
+    }
 
 
 

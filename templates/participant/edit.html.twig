@@ -3,16 +3,35 @@
 {% block title %}modifier son compte{% endblock %}
 
 {% block main %}
-    <h1>modifier son compte</h1>
+
+        {% if var %}
+             <h1>modifier son compte</h1>
+        {% else%}
+            <h1>modifier son mot de passe</h1>
+         {% endif %}
 
     <div class="container">
         {% form_theme form 'bootstrap_4_layout.html.twig' %}
         {{ form_start(form) }}
         {{ form_widget(form) }}
         <br>
-        <button type="submit" class="btn btn-success mt-2">modifier</button>
+
+
+        {% if var %}
+            <button type="submit" class="btn btn-success mt-2" onclick="return confirm('Voulez vous modifier votre profile');" >modifier</button>
+        {% else%}
+            <button type="submit" class="btn btn-success mt-2" onclick="return confirm('Voulez vous modifier votre mot de passe');" >modifier</button>
+        {% endif %}
+
+
         {{ form_end(form) }}
     </div>
 
+
+
+    {% if var %}
+  <a href="{{ path('app_reset_password', {'id': app.user.id }) }}">modifier son mot de passe</a>
     {{ include('participant/_delete_form.html.twig') }}
+   {% endif %}
+
 {% endblock %}

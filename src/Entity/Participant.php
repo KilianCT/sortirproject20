@@ -92,6 +92,24 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private $site_no_site;
 
 
+    private $passwordEdit;
+
+    /**
+     * @return mixed
+     */
+    public function getPasswordEdit()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param mixed $passwordEdit
+     */
+    public function setPasswordEdit($passwordEdit): void
+    {
+        $this->password = $passwordEdit;
+    }
+
 
     public function __construct()
     {
