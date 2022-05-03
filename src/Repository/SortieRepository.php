@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -47,20 +49,49 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-     /**
-      * @return Sortie[] Returns an array of Sortie objects
-      */
-    public function findByExampleField($value)
+    /**
+     * @return Sortie[] Returns an array of Sortie objects
+     */
+    public function findByChamps($recherche, $selectSite, $dateMin, $dateMax, $utilisateur, $isOrganisateur, $isSortiePasse, $etat)
     {
+        $organisateurEgal = 's.organisateur = :val5';
+        $organisateurPasEgal = 's.organisateur != :val5';
+        $etatPasse = 's.etat = :val6';
+        $etatPasPasse = 's.etat != :val6';
+
+        if ($isOrganisateur){
+            $string5 = $organisateurEgal;
+            $param5=$utilisateur;
+        }else{
+            $string5 = $organisateurPasEgal;
+            $param5 = 0;
+        }
+
+        if ($isSortiePasse){
+            $string6 = $etatPasse;
+        }else{
+            $string6 = $etatPasPasse;
+        }
+
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+            ->andWhere('s.nom LIKE :val1')
+            ->setParameter('val1', '%' . $recherche . '%')
+            ->andWhere('s.site_no_site = :val2')
+            ->setParameter('val2', $selectSite)
+            ->andWhere('s.dateHeureDebut >= :val3')
+            ->setParameter('val3', $dateMin)
+            ->andWhere('s.dateHeureDebut <= :val4')
+            ->setParameter('val4', $dateMax)
+            ->andWhere($string5)
+            ->setParameter('val5', $param5)
+            ->andWhere($string6)
+            ->setParameter('val6', $etat)
+                ->orderBy('s.id', 'ASC')
+                ->getQuery()
+                ->getResult();
     }
+
+
 
 
     /*

@@ -3,69 +3,45 @@
 {% block title %}Home{% endblock %}
 
  {% block main %}
-     <h1>filtrer les sorties</h1>
-
-     <form action="{{ path('app_sortie_recherche') }}" method="POST">
-
-             <select name="selectSite" class="form-select" style="margin-top: 15px">
-                 {% for site in sites %}
-                     <option value="{{ site.getId()}}"> {{ site.getNomSite()}} </option>
-                 {% endfor %}
-             </select>
-         <br>
-
-          <input type=text" placeholder="recherche" name="recherche">
-         <br>
-         <br>
-          <p>Entre<input type="date" name="dateDebut"> et <input type="date" name="dateFin"></p>
-         <br>
-         <input type="checkbox" name="orga"  >
-         <label>Sorties dont je suis Organisateur/trice</label>
-         <br>
-         <input type="checkbox" name="participantInscrit"   >
-         <label>Sorties ou je suis inscrit</label>
-         <br>
-         <input type="checkbox" name="participantPasInscrit"   >
-         <label>Sorties ou je ne suis pas inscrit</label>
-         <br>
-         <input type="checkbox" name="sortieFermee"   >
-         <label>Sortie passée</label>
-         <br>
-
-        <button type="submit">Rechercher</button>
-
-     </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 {% if app.user %}
-     <table class="table">
+
+    <h1>filtrer les sorties</h1>
+
+    <form action="{{ path('homePost') }}" method="post">
+
+        <select name="selectSite" class="form-select" style="margin-top: 15px">
+            {% for site in sites %}
+                <option value="{{ site.getId()}}"> {{ site.getNomSite()}} </option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <input type=text" placeholder="recherche" name="recherche" value="{{ recherche|default('') }}">
+        <br>
+        <br>
+        <p>Entre<input type="date" name="dateMin" value="{{ dateMin|default('') }}"> et <input type="date" name="dateMax" value="{{ dateMax|default('') }}"></p>
+        <br>
+        <input type="checkbox" id="isOrganisateur" name="organisateur" {% if isOrganisateur!=null and isOrganisateur %} checked {% endif %}>
+        <label for="isOrganisateur">Sorties dont je suis Organisateur/trice</label>
+        <br>
+        <input type="checkbox" id="isInscrit" name="participantInscrit" checked>
+        <label for="isInscrit">Sorties ou je suis inscrit</label>
+        <br>
+        <input type="checkbox" id="isPasInscrit" name="participantPasInscrit" checked>
+        <label for="isPasInscrit">Sorties ou je ne suis pas inscrit</label>
+        <br>
+        <input type="checkbox" id="isPasse" name="sortiePasse" {% if isSortiePasse!=null and isSortiePasse %} checked {% endif %}>
+        <label for="isPasse">Sortie passée</label>
+        <br>
+
+        <button type="submit">Rechercher</button>
+
+    </form>
+
+
+    <table class="table">
          <thead>
          <tr>
              <th>nom</th>
@@ -81,12 +57,15 @@
          <tbody>
 
 
-
-
-
-
-
          {% for sortie in sorties %}
+
+             {%  set participants = sortie.getParticipants()  %}
+             {%  set isContain = false  %}
+             {% for participant in participants %}
+                 {%if app.user == participant %}
+                     {%  set isContain = true  %}
+                 {%  endif %}
+             {% endfor %}
              {% if (app.user and sortie.getIdEtat().id != 1) or (app.user and sortie.getIdEtat().id == 1 and app.user.id == sortie.organisateur.id) %}
              <tr>
 
@@ -95,7 +74,8 @@
                  <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d ') : '' }}</td>
                  <td>{{ sortie.nbInscriptionMax }}</td>
                  <td>{{ sortie.getIdEtat().getLibelle() }}</td>
-                 <td>Inscrit</td>
+
+                 <td> {% if isContain  %} Inscrit  {% elseif app.user == sortie.organisateur %} Organisateur {% else %} Pas inscrit {% endif %}</td>
                  <td>{{ sortie.organisateur.nom }}</td>
                  <td>
                      {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
@@ -120,13 +100,7 @@
 
                      {% if app.user and (sortie.getIdEtat().id == 2 or sortie.getIdEtat().id == 3) and sortie.organisateur.id != app.user.id  %}
 
-                         {%  set participants = sortie.getParticipants()  %}
-                         {%  set isContain = false  %}
-                         {% for participant in participants %}
-                             {%if app.user == participant %}
-                                 {%  set isContain = true  %}
-                             {%  endif %}
-                         {% endfor %}
+
                          {%  if isContain%}
                              <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('voulez vous vraiment vous desincrire')";>se desincrire</a>
                              {% else %}
