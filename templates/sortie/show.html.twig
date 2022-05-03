@@ -3,14 +3,26 @@
 {% block title %}Sortie{% endblock %}
 
 {% block main %}
-    <h1>Sortie</h1>
+
+    {% if sortie.getIdEtat().id == 6%}
+    <h1 style="color: red"> La Sortie a été annuler par l'organisateur</h1>
+
+
+    {% else %}
+        <h1>Sortie</h1>
+    {% endif %}
+
+
+
 
     <table class="table">
         <tbody>
+        {% if app.user and  app.user.getAdministrateur() %}
             <tr>
                 <th>Id</th>
                 <td>{{ sortie.id }}</td>
             </tr>
+            {% endif %}
             <tr>
                 <th>Nom</th>
                 <td>{{ sortie.nom }}</td>
@@ -21,11 +33,11 @@
             </tr>
             <tr>
                 <th>Duree</th>
-                <td>{{ sortie.duree }}</td>
+                <td>{{ sortie.duree }} minutes</td>
             </tr>
             <tr>
                 <th>DateLimiteInscription</th>
-                <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
                 <th>NbInscriptionMax</th>
@@ -46,26 +58,43 @@
         <table class="table">
             <tbody>
             <tr>
+                <th>Place</th>
                 <th>Pseudo</th>
                 <th>Nom</th>
             </tr>
             <tr>
-                <th>Organisateur: {{sortie.getOrganisateur().pseudo }}</th>
-                <th>{{sortie.getOrganisateur().nom }} {{sortie.getOrganisateur().prenom }}</th>
+                <td>Organisateur </td>
+                <td> {{sortie.getOrganisateur().pseudo }}</td>
+                <td>{{sortie.getOrganisateur().nom }} {{sortie.getOrganisateur().prenom }}</td>
             </tr>
-
+            {% set nomb=0%}
     {% for participant in participants %}
-            <tr>
+        {% if sortie.getIdEtat().id != 6 %}
+        <tr>
+            {% set nomb=nomb+1%}
+                <td>{{nomb}}/{{sortie.nbInscriptionMax}}</td>
                 <td>{{ participant.pseudo }}</td>
                 <td>{{ participant.nom }} {{ participant.prenom }}</td>
             </tr>
+            {% else %}
+                <tr>
+                    {% set nomb=nomb+1%}
+                    <td><strike style="color: red">{{nomb}}/{{sortie.nbInscriptionMax}}</strike></td>
+                    <td><strike style="color: red">{{ participant.pseudo }}</strike></td>
+                    <td><strike style="color: red">{{ participant.nom }} {{ participant.prenom }}</strike></td>
+                </tr>
+        {%endif%}
     {% endfor %}
             </tbody>
         </table>
 
-    <a href="{{ path('home') }}">back to list</a>
 
-    <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">edit</a>
+
+    {%  if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1%}
+    <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>
 
     {{ include('sortie/_delete_form.html.twig') }}
+    {% endif %}
+
+    <a href="{{ path('home') }}">Retour sur les sorties</a>
 {% endblock %}

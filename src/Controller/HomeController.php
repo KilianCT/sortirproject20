@@ -7,6 +7,7 @@ use App\Repository\SitesRepository;
 use App\Repository\SortieRepository;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,6 +22,7 @@ class HomeController  extends AbstractController
     {
             $sites = $sitesRepository->findAll();
             $sorties = $sortieRepository->findAll();
+
 
         return $this->render('main/home.html.twig', [
             'sorties' => $sorties,

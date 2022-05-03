@@ -86,7 +86,7 @@ class SortieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sortieRepository->add($sortie);
-            return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('sortie/edit.html.twig', [
@@ -103,6 +103,20 @@ class SortieController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$sortie->getId(), $request->request->get('_token'))) {
             $sortieRepository->remove($sortie);
         }
+
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/Annuler/{idSortie}", name="app_sortie_Annuler", methods={"GET", "POST"})
+     */
+    public function Annuler(Request $request, SortieRepository $sortieRepository, EtatRepository $etatRepository) {
+
+
+        $sortie = $sortieRepository->find((int)$request->get('idSortie'));
+
+        $sortie->setIdEtat($etatRepository->find(6));
+        $sortieRepository->add($sortie);
 
         return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
@@ -126,7 +140,8 @@ class SortieController extends AbstractController
 
 
 
-        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER );
     }
 
     /**

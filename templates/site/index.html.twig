@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Site index{% endblock %}
+{% block title %}List des sites{% endblock %}
 
 {% block main %}
     <h1>Site index</h1>
@@ -32,4 +32,6 @@
     </table>
 
     <a href="{{ path('app_site_new') }}">Nouveau site</a>
+    <br>
+    <a href="{{ path('home') }}">Retour a l'accueil</a>
 {% endblock %}
