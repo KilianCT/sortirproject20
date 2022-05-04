@@ -93,7 +93,8 @@
                  <td>{{ sortie.nom }} </td>
                  <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i:s') : '' }}</td>
                  <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d ') : '' }}</td>
-                 <td>{{ sortie.nbInscriptionMax }}</td>
+                     {% set tabPart = sortie.getParticipants() %}
+                     <td> {{tabPart|length}}/{{ sortie.nbInscriptionMax }}</td>
                  <td>{{ sortie.getIdEtat().getLibelle() }}</td>
 
                  <td> {% if isContain  %} Inscrit  {% elseif app.user == sortie.organisateur %} Organisateur {% else %} Pas inscrit {% endif %}</td>
