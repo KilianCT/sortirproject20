@@ -13,7 +13,7 @@
 
         <select name="selectSite" class="form-select" style="margin-top: 15px">
             {% for site in sites %}
-                <option value="{{ site.getId()}}"> {{ site.getNomSite()}} </option>
+                <option {% if siteChoisi is defined and siteChoisi == site.getId() %}selected{% endif %}   value="{{site.getId()}}"> {{ site.getNomSite()}}</option>
             {% endfor %}
         </select>
         <br>
@@ -26,10 +26,10 @@
         <input type="checkbox" id="isOrganisateur" name="organisateur" {% if isOrganisateur!=null and isOrganisateur %} checked {% endif %}>
         <label for="isOrganisateur">Sorties dont je suis Organisateur/trice</label>
         <br>
-        <input type="checkbox" id="isInscrit" name="participantInscrit" checked>
+        <input type="checkbox" id="isInscrit" name="participantInscrit" {% if isInscrit!=null and isInscrit %} checked {% endif %}>
         <label for="isInscrit">Sorties ou je suis inscrit</label>
         <br>
-        <input type="checkbox" id="isPasInscrit" name="participantPasInscrit" checked>
+        <input type="checkbox" id="isPasInscrit" name="participantPasInscrit" {% if isNotInscrit!=null and isNotInscrit %} checked {% endif %}>
         <label for="isPasInscrit">Sorties ou je ne suis pas inscrit</label>
         <br>
         <input type="checkbox" id="isPasse" name="sortiePasse" {% if isSortiePasse!=null and isSortiePasse %} checked {% endif %}>
@@ -56,7 +56,6 @@
          </thead>
          <tbody>
 
-
          {% for sortie in sorties %}
 
              {%  set participants = sortie.getParticipants()  %}
@@ -66,10 +65,22 @@
                      {%  set isContain = true  %}
                  {%  endif %}
              {% endfor %}
-             {% if (app.user and sortie.getIdEtat().id != 1) or (app.user and sortie.getIdEtat().id == 1 and app.user.id == sortie.organisateur.id) %}
+
+             {################## filtres#####################}
+
+
+             {% if ((app.user and sortie.getIdEtat().id != 1) or (app.user and sortie.getIdEtat().id == 1
+                 and app.user.id == sortie.organisateur.id)) and
+                 ((isNotInscrit is not defined and isInscrit is not defined) or
+                 (isInscrit and isNotInscrit) or
+                 (isInscrit == false and isNotInscrit == false) or
+                 (isInscrit and isContain) or
+                 (isNotInscrit and isContain == false))
+             %}
+
              <tr>
 
-                 <td>{{ sortie.nom }}</td>
+                 <td>{{ sortie.nom }} </td>
                  <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i:s') : '' }}</td>
                  <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d ') : '' }}</td>
                  <td>{{ sortie.nbInscriptionMax }}</td>
@@ -119,7 +130,7 @@
              </tr>
          {% else %}
 
-             {%  endif %}
+             {% endif%}
          {% endfor %}
 
          </tbody>
@@ -127,6 +138,7 @@
 {% else %}
      <h1>Pour voir les sorties en cours veuillez vous connecter</h1>
 {% endif%}
+
  {% endblock %}
 
 
