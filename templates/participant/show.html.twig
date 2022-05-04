@@ -7,16 +7,16 @@
 
     <table class="table">
         <tbody>
+        <tr>
+
+            <th>Photo</th>
+            <td> <img src="\img\user\profile\{{ participant.photoUrl }}" alt="Photo_de_profil" class="img-thumbnail rounded img-fluid" style="width:250px;height:250px;"></td>
+            </tr>
+
 
             <tr>
                 <th>Email</th>
                 <td>{{ participant.email }}</td>
-            </tr>
-            <tr>
-                {% if app.user.id == participant.id %}
-                <th>Password</th>
-                <td>{{ participant.password }}</td>
-                {% endif %}
             </tr>
             <tr>
                 <th>Pseudo</th>
@@ -46,12 +46,8 @@
                 <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
             </tr>
             {% endif %}
-            <tr>
-                {% if app.user.id == participant.id %}
-                <th>Photo_url</th>
-                <td>{{ participant.photoUrl }}</td>
-            </tr>
-            {% endif %}
+
+
         </tbody>
     </table>
 

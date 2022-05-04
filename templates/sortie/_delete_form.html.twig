@@ -1,4 +1,15 @@
+
+
+
 <form method="post" action="{{ path('app_sortie_delete', {'id': sortie.id}) }}" onsubmit="return confirm('Etes vous sur de vouloir suprimer votre sortie ?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
-    <button class="btn">Supprimer</button>
+
+    <br>
+
+    {%if sortie.getIdEtat().id != 1%}
+    <label for="">Motif:</label> <br>
+    <input type="text" name="motif">
+    {%endif%}
+    <button class="btn">  {%if sortie.getIdEtat().id != 1%} Annuler {%else%} Supprimer  {%endif%}</button>
+
 </form>

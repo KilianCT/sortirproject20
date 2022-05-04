@@ -64,7 +64,7 @@
             </tr>
             <tr>
                 <td>Organisateur </td>
-                <td> {{sortie.getOrganisateur().pseudo }}</td>
+                <td><a href="{{path('app_participant_show',{'id': sortie.organisateur.id } )}}">{{ sortie.organisateur.pseudo }}</a></td>
                 <td>{{sortie.getOrganisateur().nom }} {{sortie.getOrganisateur().prenom }}</td>
             </tr>
             {% set nomb=0%}
@@ -73,7 +73,7 @@
         <tr>
             {% set nomb=nomb+1%}
                 <td>{{nomb}}/{{sortie.nbInscriptionMax}}</td>
-                <td>{{ participant.pseudo }}</td>
+                <td><a href="{{ path('app_participant_show', {'id': participant.id}) }}">{{ participant.pseudo }}</a></td>
                 <td>{{ participant.nom }} {{ participant.prenom }}</td>
             </tr>
             {% else %}
@@ -92,7 +92,6 @@
 
     {%  if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1%}
     <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>
-
     {{ include('sortie/_delete_form.html.twig') }}
     {% endif %}
 

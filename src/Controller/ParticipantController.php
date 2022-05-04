@@ -42,6 +42,25 @@ class ParticipantController extends AbstractController
         $form = $this->createForm(ParticipantType::class, $participant,['type' => 'create']);
         $form->handleRequest($request);
 
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if ($form->get('photoUrl')->getData() != null) {
+
+                $file = $form->get('photoUrl')->getData();
+
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+                $file->move($this->getParameter('users_photos_directory'), $fileName);
+
+                $participant->setPhotoUrl($fileName);
+
+            }
+        }
+
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $participant->setAdministrateur(false);
             $participant->setActif(true);

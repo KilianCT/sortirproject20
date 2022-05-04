@@ -117,7 +117,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         if ($this->getPhotoUrl() == null){
 
-            $this->setPhotoUrl("culture.png");
+            $this->setPhotoUrl("imageProfilDefaut.jpg");
 
         }
     }

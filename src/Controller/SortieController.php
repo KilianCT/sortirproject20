@@ -102,29 +102,28 @@ class SortieController extends AbstractController
     /**
      * @Route("/{id}", name="app_sortie_delete", methods={"POST"})
      */
-    public function delete(Request $request, Sortie $sortie, SortieRepository $sortieRepository): Response
+    public function delete(Request $request, Sortie $sortie, SortieRepository $sortieRepository, EtatRepository $etatRepository): Response
     {
+        $sortie = $sortieRepository->find((int)$request->get('id'));
+        $motif = $request->get('motif');
+
+
         if ($this->isCsrfTokenValid('delete'.$sortie->getId(), $request->request->get('_token'))) {
-            $sortieRepository->remove($sortie);
+
+            if($sortie->getIdEtat()->getId() == 1){
+                $sortieRepository->remove($sortie);
+
+            } else{
+                $sortie->setMotifAnnulation($motif);
+                $sortie->setIdEtat($etatRepository->find(6));
+                $sortieRepository->add($sortie);
+            }
+
+
         }
 
         return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
-
-    /**
-     * @Route("/Annuler/{idSortie}", name="app_sortie_Annuler", methods={"GET", "POST"})
-     */
-    public function Annuler(Request $request, SortieRepository $sortieRepository, EtatRepository $etatRepository) {
-
-
-        $sortie = $sortieRepository->find((int)$request->get('idSortie'));
-
-        $sortie->setIdEtat($etatRepository->find(6));
-        $sortieRepository->add($sortie);
-
-        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
-    }
-
 
     /**
      * @Route("/inscription/{idSortie}/{idParticipant}", name="app_sortie_inscription",methods={"GET", "POST"})
@@ -136,6 +135,7 @@ class SortieController extends AbstractController
 
         $sortie = $sortieRepository->find((int)$request->get('idSortie'));
         $participant = $participantRepository->find($request->get('idParticipant'));
+
 
         $sortie->addParticipant($participant);
         $sortie->addParticipantNoParticipant($participant);
@@ -158,6 +158,8 @@ class SortieController extends AbstractController
             $sortie = $sortieRepository->find((int)$request->get('idSortie'));
 
             $sortie->setIdEtat($etatRepository->find(2));
+
+
             $sortieRepository->add($sortie);
 
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);

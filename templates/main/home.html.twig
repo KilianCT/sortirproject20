@@ -99,11 +99,11 @@
 
                  <td> {% if isContain  %} Inscrit  {% elseif app.user == sortie.organisateur %} Organisateur {% else %} Pas inscrit {% endif %}</td>
                      <td>
-                     {% if app.user and sortie.getIdEtat().id == 3 and app.user.id != sortie.organisateur.id  and isContain == true %}
+
                          <a href="{{path('app_participant_show',{'id': sortie.organisateur.id } )}}">{{ sortie.organisateur.nom }}</a>
-                     {% else %}
-                         {{ sortie.organisateur.nom }}
-                     {% endif %}
+
+
+
 
 
 
@@ -135,7 +135,7 @@
                          {%  if isContain%}
                              <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return confirm('voulez vous vraiment vous desincrire')";>se desincrire</a>
                              {% else %}
-                                 {% if sortie.getIdEtat().id == 2 %}
+                                 {% if sortie.getIdEtat().id == 2  and tabPart|length < sortie.getNbInscriptionMax() %}
                                  <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";>s'inscrire</a>
                              {% endif %}
                          {% endif %}

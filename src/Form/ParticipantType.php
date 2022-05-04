@@ -40,7 +40,7 @@ class ParticipantType extends AbstractType
 
             ]);
         }
-        if($options['type'] === 'edit') {
+
             $builder->add('photoUrl', FileType::class, [
 
                 'label' => 'Photo (PNG, JPG, BMP)',
@@ -68,7 +68,7 @@ class ParticipantType extends AbstractType
                 ],
 
             ]);
-        }
+
 
 
             if($options['type'] === 'create' || $options['type'] === 'passwordEdit') {
