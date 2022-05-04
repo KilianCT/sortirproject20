@@ -39,7 +39,7 @@ class ParticipantType extends AbstractType
                     'required' => false
 
             ]);
-        }
+
 
             $builder->add('photoUrl', FileType::class, [
 
@@ -69,7 +69,7 @@ class ParticipantType extends AbstractType
 
             ]);
 
-
+        }
 
             if($options['type'] === 'create' || $options['type'] === 'passwordEdit') {
           $builder->add('password', RepeatedType::class, [

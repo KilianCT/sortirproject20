@@ -23,7 +23,7 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 class ParticipantController extends AbstractController
 {
     /**
-     * @Route("/", name="app_participant_index", methods={"GET"})
+     * @Route("/index", name="app_participant_index", methods={"GET"})
      */
     public function index(ParticipantRepository $participantRepository): Response
     {
@@ -155,6 +155,7 @@ class ParticipantController extends AbstractController
     {
             $participant = $participantRepository->find($request->get('id'));
             $participant->setAdministrateur(true);
+            $participant->setRoles(["ROLE_ADMIN"]);
             $participantRepository->add($participant);
 
 
