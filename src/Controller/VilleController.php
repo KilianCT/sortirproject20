@@ -36,6 +36,7 @@ class VilleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $villesRepository->add($ville);
+            $this->addFlash('success', 'Nouvelle ville ajoutée');
             return $this->redirectToRoute('app_ville_index', [], Response::HTTP_SEE_OTHER);
         }
 

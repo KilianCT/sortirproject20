@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Historique;
 use App\Repository\EtatRepository;
+use App\Repository\HistoriqueRepository;
 use App\Repository\SitesRepository;
 use App\Repository\SortieRepository;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -20,147 +22,60 @@ class HomeController  extends AbstractController
      * @Route(name="home", path="/", methods={"GET"})
      * * @throws \Exception
      */
-    public function home(SortieRepository  $sortieRepository, SitesRepository $sitesRepository, Request $request, EtatRepository $etatRepository)
+    public function home(SortieRepository  $sortieRepository, SitesRepository $sitesRepository, Request $request, EtatRepository $etatRepository, HistoriqueRepository $historiqueRepository)
     {
             $sites = $sitesRepository->findAll();
             $sorties = $sortieRepository->findAll();
         $date = date_create('now');
-
-
-
         setlocale(LC_TIME, 'fra_fra');
-
-
-
         $dateAfficher =  strftime('%d %B %Y | %H:%M:%S');
 
-
-
-
-
-
-
         for($i=0; $i<count($sorties);$i++){
-
-
-
             // if($sorties[$i]->getIdEtat() != 1) {
-
-
-
             $dateformatInscriptionFin = $sorties[$i]->getDateLimiteInscription();
-
-
-
             $datefinInsc=date_diff($date,$dateformatInscriptionFin);
-
-
-
             $dateformatActiv = $sorties[$i]->getDateHeureDebut();
-
-
-
             $datedebutActiv=date_diff($date,$dateformatActiv);
-
-
-
             $datefinActiv = $dateformatActiv;
-
-
-
             $datedébutSortie = $sorties[$i]->getDateHeureDebut();
-
-
-
-
-
             $datefinActiv->add(new \DateInterval('PT'. $sorties[$i]->getDuree().'M'));
-
-
-
             $dateduree=date_diff($date,$dateformatActiv);
-
-
-
-
-
-
-
-
-
             $finpasse = $dateformatActiv->add(new \DateInterval('P1M'));
-
-
-
             $finpassediff = date_diff($date,$finpasse);
-
-
-
-            if ($datefinInsc->invert == 1) {
-
-
-
+            if (($datefinInsc->invert == 1) and ($sorties[$i]->getIdEtat()->getId()!=6)) {
                 $sorties[$i]->setIdEtat($etatRepository->find(3));
-
-
-
                 $sortieRepository->add($sorties[$i]);
-
-
-
             }
-
-
-
-            if ($datedebutActiv->invert == 1){
-
-
-
+            if (($datedebutActiv->invert == 1) and ($sorties[$i]->getIdEtat()->getId()!=6)){
                 $sorties[$i]->setIdEtat($etatRepository->find(4));
-
-
-
                 $sortieRepository->add($sorties[$i]);
-
-
-
             }
-
-
-
-            if ($dateduree->invert == 1){
-
-
-
+            if (($dateduree->invert == 1) and ($sorties[$i]->getIdEtat()->getId()!=6)){
                 $sorties[$i]->setIdEtat($etatRepository->find(5));
-
-
-
                 $sortieRepository->add($sorties[$i]);
-
-
-
             }
-
-
-
-
-
             if ($finpassediff->invert == 1) {
 
+                $historique = new Historique();
+                $historique->setIdSortie($sorties[$i]->getId());
+                $historique->setNomSortie($sorties[$i]->getNom());
+                $historique->setDateDebutSortie($sorties[$i]->getDateHeureDebut());
+                $historique->setDureeSortie($sorties[$i]->getDuree());
+                $historique->setNomLieu($sorties[$i]->getLieuxNoLieux()->getNom());
+
+                $organisateur = $sorties[$i]->getOrganisateur();
+
+                $historique->setIdOrganisateur($organisateur->getId());
+                $historique->setPseudo($organisateur->getPseudo());
+                $historique->setNomOrganisateur($organisateur->getNom());
+                $historique->setPrenom($organisateur->getPrenom());
+                $historique->setTelephoneOrganisateur($organisateur->getTelephone());
+                $historique->setEmailOrganisateur($organisateur->getEmail());
 
 
-                $sorties[$i]->setIdEtat($etatRepository->find(7));
+                $historiqueRepository->add($historique);
 
-
-
-                $sortieRepository->add($sorties[$i]);
-
-
-
-
-
-
+                $sortieRepository->remove($sortieRepository->find($sorties[$i]->getId()));
 
 
 
