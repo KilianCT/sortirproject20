@@ -51,8 +51,12 @@ class SortieController extends AbstractController
             $sortie->setSiteNoSite($sitesRepository->find((int)$request->get('selectSite')));
 
             $sortieRepository->add($sortie);
+            $this->addFlash('success', 'sortit créé');
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
+
+
+
 
         return $this->renderForm('sortie/new.html.twig', [
             'sortie' => $sortie,

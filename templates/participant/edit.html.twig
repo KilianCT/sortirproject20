@@ -10,6 +10,21 @@
             <h1>modifier son mot de passe</h1>
          {% endif %}
 
+<div class="row">
+
+    <div class="row">
+
+        <div class="col mt-3 mb-3 text-center">
+
+            {% if app.user.photoUrl == null %}
+               <img src="\img\user\profile\culture.png" alt="Photo_de_profil" class="img-thumbnail rounded img-fluid">}
+            {% else %}
+                <img src="\img\user\profile\{{ app.user.photoUrl }}" alt="Photo_de_profil" class="img-thumbnail rounded img-fluid" style="width:250px;height:250px;">
+            {% endif %}
+
+
+        </div>
+
     <div class="container">
         {% form_theme form 'bootstrap_4_layout.html.twig' %}
         {{ form_start(form) }}

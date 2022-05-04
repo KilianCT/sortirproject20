@@ -114,6 +114,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->sortie_no_sortie = new ArrayCollection();
+
+        if ($this->getPhotoUrl() == null){
+
+            $this->setPhotoUrl("culture.png");
+
+        }
     }
 
     public function getId(): ?int

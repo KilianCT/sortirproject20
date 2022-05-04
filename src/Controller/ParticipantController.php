@@ -49,11 +49,13 @@ class ParticipantController extends AbstractController
             $idSiteSelected = (int) $request->get('selectSite');
             $participant->setSiteNoSite($sitesRepository->find($idSiteSelected));
             $participantRepository->add($participant);
-
+            $this->addFlash('success', 'profile créé');
 
             return $userAuthenticator->authenticateUser($participant, $authenticator, $request);
 
         }
+
+
 
         return $this->renderForm('participant/new.html.twig', [
             'participant' => $participant,
@@ -84,21 +86,34 @@ class ParticipantController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $participant->setPassword($userPasswordHasher->hashPassword($participant, $participant->getPassword()));
-            $participantRepository->add($participant);
-            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+
+            if ($form->get('photoUrl')->getData() != null) {
+
+                $file = $form->get('photoUrl')->getData();
+
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+                $file->move($this->getParameter('users_photos_directory'), $fileName);
+
+                $participant->setPhotoUrl($fileName);
+
+            }
         }
 
+            if ($form->isSubmitted() && $form->isValid()) {
+                $participantRepository->add($participant);
+
+                return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+            }
 
 
+            return $this->renderForm('participant/edit.html.twig', [
+                'participant' => $participant,
+                'form' => $form,
+                'var' => true,
+            ]);
 
-        return $this->renderForm('participant/edit.html.twig', [
-            'participant' => $participant,
-            'form' => $form,
-            'var' => true,
-        ]);
-
-    }
+        }
 
     /**
      * @Route("/{id}", name="app_participant_delete", methods={"POST"})
