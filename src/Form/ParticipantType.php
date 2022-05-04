@@ -7,24 +7,25 @@ use App\Repository\ParticipantRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class ParticipantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if($options['type'] === 'create' ||$options['type'] === 'edit') {
+        if($options['type'] === 'create' || $options['type'] === 'edit') {
         $builder
             ->add('email')
             ->add('pseudo')
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('photo_url')
             ->add('site', entityType::class,[
 
                     'class' => 'App\Entity\Site',
@@ -39,6 +40,37 @@ class ParticipantType extends AbstractType
 
             ]);
         }
+        if($options['type'] === 'edit') {
+            $builder->add('photoUrl', FileType::class, [
+
+                'label' => 'Photo (PNG, JPG, BMP)',
+
+                'mapped' => false,
+
+                'required' => false,
+
+                'constraints' => [
+
+                    new File([
+
+                        'maxSize' => '1024k',
+
+                        'mimeTypes' => [
+
+                            'image/*'
+
+                        ],
+
+                        'mimeTypesMessage' => 'Merci de sélectionner un fichier image.',
+
+                    ])
+
+                ],
+
+            ]);
+        }
+
+
             if($options['type'] === 'create' || $options['type'] === 'passwordEdit') {
           $builder->add('password', RepeatedType::class, [
             'type' => PasswordType::class,
@@ -49,6 +81,9 @@ class ParticipantType extends AbstractType
             'second_options' => ['label' => 'Mot de passe (Confirmation)'],
 
           ]);
+
+
+
             }
           if($options['type'] === 'passwordEdit') {
               $builder->add('passwordEdit', PasswordType::class, [
