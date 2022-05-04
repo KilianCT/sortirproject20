@@ -10,17 +10,217 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use app\Entity\Etat;
+use app\Entity\sortie;
 
 class HomeController  extends AbstractController
 {
 
     /**
      * @Route(name="home", path="/", methods={"GET"})
+     * * @throws \Exception
      */
-    public function home(SortieRepository  $sortieRepository, SitesRepository $sitesRepository, Request $request)
+    public function home(SortieRepository  $sortieRepository, SitesRepository $sitesRepository, Request $request, EtatRepository $etatRepository)
     {
             $sites = $sitesRepository->findAll();
             $sorties = $sortieRepository->findAll();
+        $date = date_create('now');
+
+
+
+        setlocale(LC_TIME, 'fra_fra');
+
+
+
+        $dateAfficher =  strftime('%d %B %Y | %H:%M:%S');
+
+
+
+
+
+
+
+        for($i=0; $i<count($sorties);$i++){
+
+
+
+            // if($sorties[$i]->getIdEtat() != 1) {
+
+
+
+            $dateformatInscriptionFin = $sorties[$i]->getDateLimiteInscription();
+
+
+
+            $datefinInsc=date_diff($date,$dateformatInscriptionFin);
+
+
+
+            $dateformatActiv = $sorties[$i]->getDateHeureDebut();
+
+
+
+            $datedebutActiv=date_diff($date,$dateformatActiv);
+
+
+
+            $datefinActiv = $dateformatActiv;
+
+
+
+            $datedébutSortie = $sorties[$i]->getDateHeureDebut();
+
+
+
+
+
+            $datefinActiv->add(new \DateInterval('PT'. $sorties[$i]->getDuree().'M'));
+
+
+
+            $dateduree=date_diff($date,$dateformatActiv);
+
+
+
+
+
+
+
+
+
+            $finpasse = $dateformatActiv->add(new \DateInterval('P1M'));
+
+
+
+            $finpassediff = date_diff($date,$finpasse);
+
+
+
+            if ($datefinInsc->invert == 1) {
+
+
+
+                $sorties[$i]->setIdEtat($etatRepository->find(3));
+
+
+
+                $sortieRepository->add($sorties[$i]);
+
+
+
+            }
+
+
+
+            if ($datedebutActiv->invert == 1){
+
+
+
+                $sorties[$i]->setIdEtat($etatRepository->find(4));
+
+
+
+                $sortieRepository->add($sorties[$i]);
+
+
+
+            }
+
+
+
+            if ($dateduree->invert == 1){
+
+
+
+                $sorties[$i]->setIdEtat($etatRepository->find(5));
+
+
+
+                $sortieRepository->add($sorties[$i]);
+
+
+
+            }
+
+
+
+
+
+            if ($finpassediff->invert == 1) {
+
+
+
+                $sorties[$i]->setIdEtat($etatRepository->find(7));
+
+
+
+                $sortieRepository->add($sorties[$i]);
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+            //  }
+
+
+
+        }
+
+
+
+
+
+
+
+        //for($i=0; $i<count($sorties);$i++){
+
+
+
+        //if($sorties[$i]->getIdEtat() != 1) {
+
+
+
+        //     $dateformatActiv = $sorties[$i]->getDateHeureDebut();
+
+
+
+        //  $datedebutActiv=date_diff($dateformatActiv,$date);
+
+
+
+        //    if ($datedebutActiv ) {
+
+
+
+        //       $sorties[$i]->setIdEtat($etatRepository->find(4));
+
+
+
+        //        $sortieRepository->add($sorties[$i]);
+
+
+
+        //   }
+
+
+
+        //}
+
+
+
+        //  }
 
 
         return $this->render('main/home.html.twig', [
@@ -30,6 +230,7 @@ class HomeController  extends AbstractController
             'isInscrit' => false,
             'isNotInscrit' => false,
             'isSortiePasse' => false,
+            'dateAfficher' => $dateAfficher,
         ]);
 
     }
@@ -40,6 +241,9 @@ class HomeController  extends AbstractController
     public function homePost(SortieRepository  $sortieRepository, SitesRepository $sitesRepository, Request $request, UserInterface $user, EtatRepository $etatRepository)
     {
             //$sorties = $sortieRepository->findAll();
+            $date = date_create('now');
+            setlocale(LC_TIME, 'fra_fra');
+            $dateAfficher =  strftime('%d %B %Y | %H:%M:%S');
             $utilisateur = $user;
             $sites = $sitesRepository->findAll();
             $recherche= $request->get('recherche');
@@ -104,6 +308,7 @@ class HomeController  extends AbstractController
             'dateMin' => $dateMin,
             'dateMax' => $dateMax,
             'siteChoisi' => $siteChoisi,
+            'dateAfficher' => $dateAfficher,
         ]);
 
 

@@ -5,7 +5,10 @@
  {% block main %}
 
 
-{% if app.user %}
+     <p align="right"> Date du jour :    </p>
+
+
+     {% if app.user %}
 
     <h1>filtrer les sorties</h1>
 
@@ -78,7 +81,14 @@
                  (isNotInscrit and isContain == false))
              %}
 
-             <tr>
+
+
+
+             {% if sortie.getIdEtat().id == 7%}
+
+             {% else %}
+
+                 <tr>
 
                  <td>{{ sortie.nom }} </td>
                  <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i:s') : '' }}</td>
@@ -87,8 +97,17 @@
                  <td>{{ sortie.getIdEtat().getLibelle() }}</td>
 
                  <td> {% if isContain  %} Inscrit  {% elseif app.user == sortie.organisateur %} Organisateur {% else %} Pas inscrit {% endif %}</td>
-                 <td>{{ sortie.organisateur.nom }}</td>
-                 <td>
+                     <td>
+                     {% if app.user and sortie.getIdEtat().id == 3 and app.user.id != sortie.organisateur.id  and isContain == true %}
+                         <a href="{{path('app_participant_show',{'id': sortie.organisateur.id } )}}">{{ sortie.organisateur.nom }}</a>
+                     {% else %}
+                         {{ sortie.organisateur.nom }}
+                     {% endif %}
+
+
+
+                     </td>
+                     <td>
                      {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
                      <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">modifier</a>
                      {%  endif %}
@@ -113,7 +132,7 @@
 
 
                          {%  if isContain%}
-                             <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('voulez vous vraiment vous desincrire')";>se desincrire</a>
+                             <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return confirm('voulez vous vraiment vous desincrire')";>se desincrire</a>
                              {% else %}
                                  {% if sortie.getIdEtat().id == 2 %}
                                  <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";>s'inscrire</a>
@@ -127,8 +146,9 @@
                      <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">afficher</a>
                      {%  endif %}
                  </td>
-             </tr>
+             </tr>{%  endif %}
          {% else %}
+
 
              {% endif%}
          {% endfor %}

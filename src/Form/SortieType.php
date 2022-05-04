@@ -10,7 +10,8 @@ use App\Entity\Ville;
 use App\Entity\Sortie;
 
 
-
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -30,8 +31,18 @@ class SortieType extends AbstractType
             ->add('dateHeureDebut')
             ->add('duree')
             ->add('dateLimiteInscription')
-            ->add('nbInscriptionMax')
-            ->add('infosSortie');
+            ->add('nbInscriptionMax');
+
+
+
+
+
+
+        $builder->add('infosSortie', TextareaType::class, [
+        'required' => false,
+            'label' => 'Description',
+            'attr' => ['maxlength' => 1000, 'placeHolder' => 'Description'],
+        ]);
 
 
         $builder->add('dateHeureDebut', DateTimeType::class, [
