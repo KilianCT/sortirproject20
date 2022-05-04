@@ -49,11 +49,13 @@ class ParticipantController extends AbstractController
             $idSiteSelected = (int) $request->get('selectSite');
             $participant->setSiteNoSite($sitesRepository->find($idSiteSelected));
             $participantRepository->add($participant);
-
+            $this->addFlash('success', 'profile créé');
 
             return $userAuthenticator->authenticateUser($participant, $authenticator, $request);
 
         }
+
+
 
         return $this->renderForm('participant/new.html.twig', [
             'participant' => $participant,
