@@ -4,60 +4,51 @@
 
  {% block main %}
 
-
-     <p align="right"> Date du jour :    </p>
-
-
      {% if app.user %}
 
-    <h1>filtrer les sorties</h1>
-
+<div class="container" {% if app.user == false %} style="background-color: black" {% endif %}>
+    <h4 style="text-align: right; color: orange"> {% if app.user %}  Bienvenue {% endif%} {% if app.user %}{{ app.user.pseudo }}{%endif%} !</h4>
+    <p align="right"> Date du jour : {{ "now"|date("d/m/Y") }}   </p>
+    <h2 style="text-align: center; margin-bottom: 25px" >Liste de sorties</h2>
     <form action="{{ path('homePost') }}" method="post">
 
-        <select name="selectSite" class="form-select" style="margin-top: 15px">
-            {% for site in sites %}
-                <option {% if siteChoisi is defined and siteChoisi == site.getId() %}selected{% endif %}   value="{{site.getId()}}"> {{ site.getNomSite()}}</option>
-            {% endfor %}
-        </select>
-        <br>
+    <div class="row">
 
-        <input type=text" placeholder="recherche" name="recherche" value="{{ recherche|default('') }}">
-        <br>
-        <br>
-        <p>Entre<input type="date" name="dateMin" value="{{ dateMin|default('') }}"> et <input type="date" name="dateMax" value="{{ dateMax|default('') }}"></p>
-        <br>
-        <input type="checkbox" id="isOrganisateur" name="organisateur" {% if isOrganisateur!=null and isOrganisateur %} checked {% endif %}>
-        <label for="isOrganisateur">Sorties dont je suis Organisateur/trice</label>
-        <br>
-        <input type="checkbox" id="isInscrit" name="participantInscrit" {% if isInscrit!=null and isInscrit %} checked {% endif %}>
-        <label for="isInscrit">Sorties ou je suis inscrit</label>
-        <br>
-        <input type="checkbox" id="isPasInscrit" name="participantPasInscrit" {% if isNotInscrit!=null and isNotInscrit %} checked {% endif %}>
-        <label for="isPasInscrit">Sorties ou je ne suis pas inscrit</label>
-        <br>
-        <input type="checkbox" id="isPasse" name="sortiePasse" {% if isSortiePasse!=null and isSortiePasse %} checked {% endif %}>
-        <label for="isPasse">Sortie passée</label>
-        <br>
+        <div class="col">
+            <input type="checkbox" id="isOrganisateur" name="organisateur" {% if isOrganisateur!=null and isOrganisateur %} checked {% endif %}>
+            <label for="isOrganisateur">Sorties dont je suis Organisateur/trice</label>
+            <br>
+            <input type="checkbox" id="isInscrit" name="participantInscrit" {% if isInscrit!=null and isInscrit %} checked {% endif %}>
+            <label for="isInscrit">Sorties ou je suis inscrit</label>
+            <br>
+            <input type="checkbox" id="isPasInscrit" name="participantPasInscrit" {% if isNotInscrit!=null and isNotInscrit %} checked {% endif %}>
+            <label for="isPasInscrit">Sorties ou je ne suis pas inscrit</label>
+            <br>
+            <input type="checkbox" id="isPasse" name="sortiePasse" {% if isSortiePasse!=null and isSortiePasse %} checked {% endif %}>
+            <label for="isPasse">Sortie passée</label>
+        </div>
 
-        <button type="submit">Rechercher</button>
+        <div class="col">
+            <p>Entre  <input type="date" name="dateMin" value="{{ dateMin|default('') }}"> et <input type="date" name="dateMax" value="{{ dateMax|default('') }}"></p>
+            <input type=text" class="form-control me-2" placeholder="recherche dans le nom.." name="recherche" value="{{ recherche|default('') }}" style="margin-top: 15px;">
+        </div>
+
+        <div class="col">
+            <select name="selectSite" class="form-select" style="margin-bottom: 7px;">
+                {% for site in sites %}
+                    <option {% if siteChoisi is defined and siteChoisi == site.getId() %}selected{% endif %}   value="{{site.getId()}}"> {{ site.getNomSite()}}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn" style="color: white; margin: 0">Rechercher</button>
+        </div>
+
+    </div>
 
     </form>
 
 
-    <table class="table">
-         <thead>
-         <tr>
-             <th>nom</th>
-             <th>date sortie</th>
-             <th>Date de cloture</th>
-             <th>nombre d'inscription</th>
-             <th>Etat</th>
-             <th>Inscrit</th>
-             <th>Organisateur</th>
-             <th>actions</th>
-         </tr>
-         </thead>
-         <tbody>
+     <div class="container" style="margin-top: 25px">
+         <div class="row">
 
          {% for sortie in sorties %}
 
@@ -82,84 +73,110 @@
              %}
 
 
+             {% set tabPart = sortie.getParticipants() %}
 
 
-             {% if sortie.getIdEtat().id == 7%}
+            <div class="col col-3">
+                 <div class="card text-center">
+                     <div class="card-header">
+                         le {{sortie.dateHeureDebut ? sortie.dateHeureDebut|date('d-m-y') : '' }}
+                         <br> à {{sortie.dateHeureDebut ? sortie.dateHeureDebut|date('H:i') : '' }}
+                     </div>
+                     <div class="card-body">
+                         <h5 class="card-title">{{ sortie.nom }}</h5>
+                         <p class="card-text" {% if sortie.getIdEtat().getId() < 3 %} style="color: seagreen" {% else %} style="color: orange" {% endif %} "> {{ sortie.getIdEtat().getLibelle()|upper}} </p>
+                         <p class="card-text"> {{tabPart|length}}/{{ sortie.nbInscriptionMax }} (inscrit/max) </p>
+                         <p class="card-text">  </p>
 
-             {% else %}
+                         {# button AFFICHER#}
+                         {% if app.user and sortie.getIdEtat().id != 1 %}
+                             <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}"><button class="btn btn-primary">Afficher</button></a>
+                         {%  endif %}
 
-                 <tr>
+                         {# button MODIFIER#}
+                         {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
+                             <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}"><button class="btn" style="color: white;">modifier</button></a>
+                         {%  endif %}
+                         <br>
+                     {# button PUBLIER#}
 
-                 <td>{{ sortie.nom }} </td>
-                 <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i:s') : '' }}</td>
-                 <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d ') : '' }}</td>
-                     {% set tabPart = sortie.getParticipants() %}
-                     <td> {{tabPart|length}}/{{ sortie.nbInscriptionMax }}</td>
-                 <td>{{ sortie.getIdEtat().getLibelle() }}</td>
+                         {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
+                             <form method="post" action="{{ path('app_sortie_publier', {'idSortie': sortie.id}) }}" onsubmit="return confirm('voulez vous publier votre sortie');">
+                                 <input type="hidden">
+                                 <button class="btn" style="color: white;">publier</button>
+                             </form>
+                         {%  endif %}
 
-                 <td> {% if isContain  %} Inscrit  {% elseif app.user == sortie.organisateur %} Organisateur {% else %} Pas inscrit {% endif %}</td>
-                     <td>
+                     {# button SUPPRIMER#}
 
-                         <a href="{{path('app_participant_show',{'id': sortie.organisateur.id } )}}">{{ sortie.organisateur.nom }}</a>
-
-
-
-
-
-
-                     </td>
-                     <td>
-                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
-                     <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">modifier</a>
-                     {%  endif %}
-
-                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 1 %}
-
-                         <form method="post" action="{{ path('app_sortie_publier', {'idSortie': sortie.id}) }}" onsubmit="return confirm('voulez vous publier votre sortie');">
-                             <input type="hidden">
-                             <button class="btn">publier</button>
-
-                         </form>
-
-
-                     {%  endif %}
-
-                     {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 2 %}
-                         {{ include('sortie/_delete_form.html.twig') }}
-                     {%  endif %}
-
-
-                     {% if app.user and (sortie.getIdEtat().id == 2 or sortie.getIdEtat().id == 3) and sortie.organisateur.id != app.user.id  %}
-
-
-                         {%  if isContain%}
-                             <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return confirm('voulez vous vraiment vous desincrire')";>se desincrire</a>
+                         {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 2 %}
+                             {{ include('sortie/_delete_form.html.twig') }}
+                         {%  endif %}
+                         {% if app.user and (sortie.getIdEtat().id == 2 or sortie.getIdEtat().id == 3) and sortie.organisateur.id != app.user.id  %}
+                             {%  if isContain%}
+                                 <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return confirm('voulez vous vraiment vous desincrire')";><button class="btn btn-primary">Se desincrire</button></a>
                              {% else %}
                                  {% if sortie.getIdEtat().id == 2  and tabPart|length < sortie.getNbInscriptionMax() %}
-                                 <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";>s'inscrire</a>
+                                     <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";><button class="btn btn-primary">S'inscrire</button></a>
+                                 {% endif %}
                              {% endif %}
-                         {% endif %}
+                         {%  endif %}
 
 
-                     {%  endif %}
 
-                     {% if app.user and sortie.getIdEtat().id != 1 %}
-                     <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">afficher</a>
-                     {%  endif %}
-                 </td>
-             </tr>{%  endif %}
-         {% else %}
+                     </div>
+                     <div class="card-footer text-muted">
+                         <p class="card-text"> {%if isContain%} Inscrit  {% elseif app.user == sortie.organisateur %} Organisateur {% else %} Pas inscrit {% endif%} </p>
+                         <p>Limite d'inscription : <br> {{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d ') : '' }}</p>
+                         <p>Organisateur: <a href="{{path('app_participant_show',{'id': sortie.organisateur.id } )}}">{{ sortie.organisateur.nom }}</a></p>
 
-
-             {% endif%}
+                     </div>
+                 </div>
+            </div>
+                 {% endif %}
          {% endfor %}
 
-         </tbody>
-     </table>
-{% else %}
-     <h1>Pour voir les sorties en cours veuillez vous connecter</h1>
-{% endif%}
+         </div>
+    </div>
 
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        Pour voir les sorties en cours veuillez vous connecter
+    </div>
+
+    <div class="container pt-3">
+        <div class="row">
+            <div class="col g-col-3">
+                <img style="width: 20vw;" src="https://res.cloudinary.com/serdy-m-dia-inc/image/upload/f_auto/fl_lossy/q_auto:eco/x_0,y_525,w_5000,h_2812,c_crop/w_1200,h_630,c_scale/v1528987938/foodlavie/prod/articles/les-essentiels-pour-reussir-votre-garden-party-7e1cde6b" alt="" class="rounded-pill">
+            </div>
+            <div class="col g-col_3">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYcvrsEa9NWHd-f0c-_QpaEyvc9gnt0YB0mSeSNoXYwrBq-2rh9oqtdGvLzXf2tnYmo8c&usqp=CAU" alt="" style="width: 20vw;" class="rounded-pill">
+            </div>
+            <div class="col g-col-3">
+                <img src="https://кбр07.рф/wp-content/uploads/2015/02/pohod-1.jpg" alt="" style="width: 20vw;" class="rounded-pill">
+            </div>
+            <div class="col g-col-3">
+                <img style="width: 20vw;" src="https://studiorussia.ru/wp-content/uploads/2019/11/partysr-1024x576.jpg" alt="" class="rounded-pill">
+            </div>
+            <div class="col g-col-3">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3nTF2sXfwUgwhCP9Zd35hnF5TsrAgIRbZcg&usqp=CAU" alt="" style="width: 15vw;" class="rounded-pill">
+            </div>
+            <div class="col g-col-3">
+                <img src="https://www.leparisien.fr/resizer/xyJniteDGHPiBR0LtkUQaRlfHOY=/932x582/cloudfront-eu-central-1.images.arcpublishing.com/leparisien/JDUQVQWWQZGXTIUWP4ZP4EHFP4.jpg" alt="" style="width: 15vw;" class="rounded-pill">
+            </div>
+            <div class="col g-col-3">
+                <img src="https://static.tildacdn.com/tild3230-3461-4465-a662-663136343230/DqnFAG3h57A.jpg" alt="" style="width: 15vw;" class="rounded-pill">
+            </div>
+            <div class="col g-col-3">
+                <img style="width: 15vw;" src="https://www.chateauroux-tourisme.com/wp-content/uploads/2017/12/Sortir.jpg" alt="" class="rounded-pill">
+            </div>
+            <div class="col g-col-3">
+                <img src="https://detki.co.il/images/health/deti-bassein.jpg" alt="" style="width: 15vw;" class="rounded-pill">
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endif %}
  {% endblock %}
 
 

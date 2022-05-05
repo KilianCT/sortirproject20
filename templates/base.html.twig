@@ -1,85 +1,110 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+            .btn{
+                min-width: 150px;
+                background-image: url(https://v-georgia.com/wp-content/uploads/2016/05/zakat_batumi1-858x503.jpg);
+                margin-top: 5px;
+                margin-bottom: 5px;
+                color: white;
+                }
+        </style>
         <meta charset="UTF-8">
         <title>{% block title %}Base{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     </head>
-    <header>
-    <body>
+    <body {%if app.user == false%} style="background-color: black" {%endif%}>
         <header style="margin-bottom: 5px">
-            <nav class="navbar navbar-expand-lg navbar-light bg-success">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-image: url(https://v-georgia.com/wp-content/uploads/2016/05/zakat_batumi1-858x503.jpg)">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="{{ path('home') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-brightness-alt-high-fill" viewBox="0 0 16 16">
+                    <span><a class="navbar-brand pt-3" href="{{ path('home') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-brightness-alt-high-fill" viewBox="0 0 16 16" style="color: orange;">
                             <path d="M8 3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 3zm8 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zm-13.5.5a.5.5 0 0 0 0-1h-2a.5.5 0 0 0 0 1h2zm11.157-6.157a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm-9.9 2.121a.5.5 0 0 0 .707-.707L3.05 5.343a.5.5 0 1 0-.707.707l1.414 1.414zM8 7a4 4 0 0 0-4 4 .5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5 4 4 0 0 0-4-4z"/>
                         </svg>
-                        <span style="font-size: larger; font-weight: bold">S O R T I R</span>
-                    </a>
-                    <h2 class="text-white">Bienvenue {% if app.user %}{{ app.user.pseudo }}{%endif%}</h2>
-                </div>
+                        <span class="fs-4 fw-bolder" style="color: orange">S O R T I R</span>
+                    </a></span>
+                    {% if app.user!=true %}
+                        <span><a href="{{ path('app_participant_new') }}" class="text-white  text text-decoration-none ">
 
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+                                S'inscrire</a></span>
+                        <span><a href="{{ path('app_login') }}" class="text-white  text text-decoration-none ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+                                  <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                                </svg>
 
+                                Se connecter</a></span>
+                    {% endif %}
 
-                <div class="col-sm-4 offset-md-1 py-4">
-                    <h4 class="text-white">Menu</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ path('home') }}" class="text-white">Accueil</a></li>
-                        <br>
+                    {% if app.user %}
+                        {% if app.user %} <span><a href="{{ path('home') }}" class="text-white dropdown-item text-decoration-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-heart" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.707L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.646a.5.5 0 0 0 .708-.707L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207l-5-5-5 5V13.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7.207Zm-5-.225C9.664 5.309 13.825 8.236 8 12 2.175 8.236 6.336 5.309 8 6.982Z"/>
+                                </svg>
+                                Accueil</a></span> {% endif %}
                         {% if app.user and  app.user.getAdministrateur() %}
-                            <li><a href="{{ path('app_site_index') }}" class="text-white">Sites</a></li>
-                            <li><a href="{{ path('app_ville_index') }}" class="text-white">Villes</a></li>
-                            <li><a href="{{ path('app_participant_index') }}" class="text-white">gérer utilisateur</a></li>
+                            <span><a href="{{ path('app_site_index') }}" class="text-decoration-none" style="color: orange">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-bank2" viewBox="0 0 16 16">
+                                      <path d="M8.277.084a.5.5 0 0 0-.554 0l-7.5 5A.5.5 0 0 0 .5 6h1.875v7H1.5a.5.5 0 0 0 0 1h13a.5.5 0 1 0 0-1h-.875V6H15.5a.5.5 0 0 0 .277-.916l-7.5-5zM12.375 6v7h-1.25V6h1.25zm-2.5 0v7h-1.25V6h1.25zm-2.5 0v7h-1.25V6h1.25zm-2.5 0v7h-1.25V6h1.25zM8 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM.5 15a.5.5 0 0 0 0 1h15a.5.5 0 1 0 0-1H.5z"/>
+                                    </svg>
+                                    Sites</a></span>
+                            <span><a href="{{ path('app_ville_index') }}" class="text-decoration-none"  style="color: orange">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
+                                      <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+                                      <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
+                                    </svg>
+                                    Villes</a></span>
+                            <span><a href="{{ path('app_participant_index') }}" class="text-decoration-none"  style="color: orange">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-check-fill" viewBox="0 0 16 16">
+                                      <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                      <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                    </svg>
+                                    Gérer utilisateur</a></span>
                         {% endif %}
-                        <br>
-
-
-
-
-
-                        {% if app.user %}
-                            <li><a href="{{ path('app_sortie_new', {'id': app.user.id }) }}" class="text-white">Ajouter une sortie</a></li>
-                            <li><a href="{{ path('app_participant_edit', {'id': app.user.id }) }}" class="text-white">mon profil</a></li>
-                        {% endif %}
-
-
-
-
-
-                        <br/>
-                        {% if app.user %}
-
-
-                            <li><a href="{{ path('app_logout') }}" class="text-white">Se déconnecter</a></li>
-                        {% else %}
-                            <li><a href="{{ path('app_participant_new') }}" class="text-white">S'inscrire</a></li>
-                            <li><a href="{{ path('app_login') }}" class="text-white">Se connecter</a></li>
-                        {% endif %}
-                    </ul>
+                    {% endif %}
+                    {% if app.user %}
+                        <span><a href="{{ path('app_sortie_new', {'id': app.user.id }) }}" class="text-white  text-decoration-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-calendar2-plus" viewBox="0 0 16 16">
+                                  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+                                  <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4zM8 8a.5.5 0 0 1 .5.5V10H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V11H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8z"/>
+                                </svg>
+                                Ajouter une sortie</a></span>
+                        <span><a href="{{ path('app_participant_edit', {'id': app.user.id }) }}" class="text-white text-decoration-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-file-person" viewBox="0 0 16 16">
+                                  <path d="M12 1a1 1 0 0 1 1 1v10.755S12 11 8 11s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/>
+                                  <path d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                </svg>
+                                Mon profil</a></span>
+                        <span><a href="{{ path('app_logout') }}" class="text-white text-decoration-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                </svg>
+                                Se déconnecter</a></span>
+                    {% endif %}
                 </div>
 
             </nav>
         </header>
 
-        {% for group, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ group }}" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endfor %}
-
-
 
         {% block main %}
-
 
         {% endblock %}
 
 
     <footer style="margin-top: 50px">
-        <nav class="navbar navbar-expand-lg navbar-light bg-success fixed-bottom">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-bottom" style="color: mediumblue; background-image: url(https://v-georgia.com/wp-content/uploads/2016/05/zakat_batumi1-858x503.jpg)">
             <div class="container-fluid p-3">
-                <p class="position-absolute top-50 start-50 translate-middle">&copy; 2022 Notre groupe</p>
+                <p class="position-absolute top-50 start-50 translate-middle text-white">&copy; 2022 Notre groupe</p>
             </div>
         </nav>
     </footer>

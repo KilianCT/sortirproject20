@@ -7,9 +7,9 @@
     <br>
 
     {%if sortie.getIdEtat().id != 1%}
-    <label for="">Motif:</label> <br>
+    <label for="" style="color: darkgray">Motif d'annulation:</label> <br>
     <input type="text" name="motif">
     {%endif%}
-    <button class="btn">  {%if sortie.getIdEtat().id != 1%} Annuler {%else%} Supprimer  {%endif%}</button>
+    <button class="btn" style="color: white;" >  {%if sortie.getIdEtat().id != 1%} Annuler {%else%} Supprimer  {%endif%}</button>
 
 </form>
