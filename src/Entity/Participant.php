@@ -28,6 +28,15 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="L 'email ' est requis !")
+     * @Assert\Length(
+     * min = 6,
+     * max = 180,
+     * minMessage = "L'email doit contenir au minimum {{ limit }} caractères !",
+     * maxMessage = "L'email doit contenir au maximum {{ limit }} caractères !"
+     *)
+     * @Assert\Email(message = "L'adresse e-mail '{{ value }}' est invalide !")
+     *
+     *
      */
     private $email;
 
@@ -38,30 +47,37 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column( name ="password", type="string")
+     *  @Assert\Length(
+     * min = 8,
+     *
+     * minMessage = "Le mot de passe doit contenir au minimum {{ limit }} caractères !",
+     *
+     *)
+     *
      */
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=100, unique=true)
      * @Assert\NotBlank(message="Le pseudo est requis !")
      */
     private $pseudo;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank(message="Le nom est requis !")
      */
     private $nom;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank(message="Le prenom est requis !")
      */
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=150, nullable=true)
+     * @ORM\Column(type="string", length=12, nullable=true)
      */
     private $telephone;
 

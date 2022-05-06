@@ -39,7 +39,17 @@
                     <option {% if siteChoisi is defined and siteChoisi == site.getId() %}selected{% endif %}   value="{{site.getId()}}"> {{ site.getNomSite()}}</option>
                 {% endfor %}
             </select>
+            {%if rechercher == true%}
             <button type="submit" class="btn" style="color: white; margin: 0">Rechercher</button>
+            {% endif%}
+            {%if AnnulerRecherche == true%}
+            <button onclick="rtn()" class="btn" style="color: white; margin: 0">Annuler la Recherche</button>
+           {% endif %}
+            <script>
+                function rtn() {
+                    window.history.back();
+                }
+            </script>
         </div>
 
     </div>
@@ -51,7 +61,6 @@
          <div class="row">
 
          {% for sortie in sorties %}
-
              {%  set participants = sortie.getParticipants()  %}
              {%  set isContain = false  %}
              {% for participant in participants %}
@@ -77,14 +86,18 @@
 
 
             <div class="col col-3">
-                 <div class="card text-center">
+                 <div class="card text-center"
+                     {%if sortie.getIdEtat().getId() == 1 %}style=" border: 2px dashed orange;"{%endif %}
+                      {%if sortie.getIdEtat().getId() == 6 %}style=" border: 2px solid red;"{%endif %}
+                         {%if isContain and sortie.getIdEtat().getId() != 4 %} style=" border: 2px solid seagreen;"{%endif %}
+                      {% if sortie.getIdEtat().getId() == 4 %} style=" border: 2px dashed seagreen;"{%endif %}>
                      <div class="card-header">
                          le {{sortie.dateHeureDebut ? sortie.dateHeureDebut|date('d-m-y') : '' }}
                          <br> à {{sortie.dateHeureDebut ? sortie.dateHeureDebut|date('H:i') : '' }}
                      </div>
                      <div class="card-body">
                          <h5 class="card-title">{{ sortie.nom }}</h5>
-                         <p class="card-text" {% if sortie.getIdEtat().getId() < 3 %} style="color: seagreen" {% else %} style="color: orange" {% endif %} "> {{ sortie.getIdEtat().getLibelle()|upper}} </p>
+                         <p class="card-text" {% if sortie.getIdEtat().getId() == 1 or sortie.getIdEtat().getId() == 3 %} style="color: orange" {%elseif sortie.getIdEtat().getId() == 2 or sortie.getIdEtat().getId() == 4 %}  style="color: seagreen"{% else%}style="color: red"{% endif %} "> {{ sortie.getIdEtat().getLibelle()|upper}} </p>
                          <p class="card-text"> {{tabPart|length}}/{{ sortie.nbInscriptionMax }} (inscrit/max) </p>
                          <p class="card-text">  </p>
 
@@ -112,12 +125,19 @@
                          {% if app.user and  app.user.id == sortie.organisateur.id  and sortie.getIdEtat().id == 2 %}
                              {{ include('sortie/_delete_form.html.twig') }}
                          {%  endif %}
-                         {% if app.user and (sortie.getIdEtat().id == 2 or sortie.getIdEtat().id == 3) and sortie.organisateur.id != app.user.id  %}
+
+                         {% if app.user and ( sortie.getIdEtat().id == 3) and sortie.organisateur.id != app.user.id  %}
+                            {%  if isContain%}
+                                 <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return confirm('voulez vous vraiment vous desincrire ? ATTENTION : Vous ne pourrez plus vous réinscrire ! ')";><button class="btn btn-primary" style="color: indianred">Désincription Définitive !</button></a>
+                             {% endif %}
+                         {% endif %}
+
+                         {% if app.user and (sortie.getIdEtat().id == 2) and sortie.organisateur.id != app.user.id  %}
                              {%  if isContain%}
-                                 <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return confirm('voulez vous vraiment vous desincrire')";><button class="btn btn-primary">Se desincrire</button></a>
+                                 <a href="{{ path('app_sortie_desinscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return confirm('voulez vous vraiment vous desincrire')";><button class="btn btn-primary" style="color: indianred">Se desincrire</button></a>
                              {% else %}
                                  {% if sortie.getIdEtat().id == 2  and tabPart|length < sortie.getNbInscriptionMax() %}
-                                     <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";><button class="btn btn-primary">S'inscrire</button></a>
+                                     <a href="{{ path('app_sortie_inscription',  {'idSortie': sortie.id , 'idParticipant': app.user.id}) }}" onclick="return alert('vous etes inscrit')";><button class="btn btn-primary" style="color: seagreen">S'inscrire</button></a>
                                  {% endif %}
                              {% endif %}
                          {%  endif %}
@@ -126,7 +146,7 @@
 
                      </div>
                      <div class="card-footer text-muted">
-                         <p class="card-text"> {%if isContain%} Inscrit  {% elseif app.user == sortie.organisateur %} Organisateur {% else %} Pas inscrit {% endif%} </p>
+                         <p class="card-text" {%if isContain%} style="color: seagreen" {%endif%}> {%if isContain%} Inscrit  {% elseif app.user == sortie.organisateur %} Organisateur {% else %} Pas inscrit {% endif%} </p>
                          <p>Limite d'inscription : <br> {{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d ') : '' }}</p>
                          <p>Organisateur: <a href="{{path('app_participant_show',{'id': sortie.organisateur.id } )}}">{{ sortie.organisateur.nom }}</a></p>
 

@@ -4,10 +4,14 @@
 
 {% block main %}
     <div class="container">
-    <h1>Edit Site</h1>
+    <h1>Modifier un site</h1>
 
     {{ include('site/_form.html.twig', {'button_label': 'Modifier'}) }}
-        <a href="{{ path('app_site_index') }}">retour a la liste</a>
+
+        <form method="GET" action="{{ path('app_site_index') }}" >
+            <button style="color: cornflowerblue;" class="btn" >retour a la liste</button>
+        </form>
+
 
     </div>
 {% endblock %}

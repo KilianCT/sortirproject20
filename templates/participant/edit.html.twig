@@ -33,9 +33,9 @@
 
 
         {% if var %}
-            <button type="submit" class="btn btn-success mt-2" onclick="return confirm('Voulez vous modifier votre profile');" >modifier</button>
+            <button type="submit" class="btn btn-success mt-2" onclick="return confirm('Voulez vous modifier votre profile ?');" style="color: orange" >modifier le profil</button>
         {% else%}
-            <button type="submit" class="btn btn-success mt-2" onclick="return confirm('Voulez vous modifier votre mot de passe');" >modifier</button>
+            <button type="submit" class="btn btn-success mt-2" onclick="return confirm('Voulez vous modifier votre mot de passe ?');" style="color: orange" >modifier le mot de passe</button>
         {% endif %}
 
 
@@ -45,8 +45,13 @@
 
 
     {% if var %}
-  <a href="{{ path('app_reset_password', {'id': app.user.id }) }}">modifier son mot de passe</a>
+        <form method="GET" action="{{ path('app_reset_password', {'id': app.user.id }) }}">
+            <button style="color: white;" class="btn" >modifier son mot de passe</button>
+        </form>
     {{ include('participant/_delete_form.html.twig') }}
    {% endif %}
+        <form method="GET" action="{{ path('home') }}" >
+            <button style="color: cornflowerblue;" class="btn" >Accueil</button>
+        </form>
 
 {% endblock %}

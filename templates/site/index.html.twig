@@ -19,7 +19,9 @@
 
                 <td>{{ site.nomSite }}</td>
                 <td>
-                    <a href="{{ path('app_site_edit', {'id': site.id}) }}">Modifier</a>
+                    <form method="GET" action="{{ path('app_site_edit', {'id': site.id}) }}" >
+                        <button style="color: orange;" class="btn" >Modifier</button>
+                    </form>
                     {{ include('site/_delete_form.html.twig') }}
                 </td>
             </tr>
@@ -31,7 +33,14 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_site_new') }}">Nouveau site</a>
+
     <br>
-    <a href="{{ path('home') }}">Retour a l'accueil</a>
+    <form method="GET" action="{{ path('app_site_new') }}" >
+        <button style="color: seagreen;" class="btn" >Nouveau site</button>
+    </form>
+
+    <form method="GET" action="{{ path('home') }}" >
+        <button style="color: cornflowerblue;" class="btn" >Accueil</button>
+    </form>
+
 {% endblock %}

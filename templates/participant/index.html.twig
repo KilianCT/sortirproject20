@@ -56,7 +56,11 @@
 
     <a href="{{ path('app_participant_new') }}">nouveau Participant</a>
         <br>
-        <a href="{{ path('home') }}">Retour a l'accueil</a>
-
+        <form method="GET" action="{{ path('app_participant_new') }}" >
+            <button style="color: seagreen;" class="btn" >nouveau Participant</button>
+        </form>
+        <form method="GET" action="{{ path('home') }}" >
+            <button style="color: cornflowerblue;" class="btn" >Accueil</button>
+        </form>
     </div>
 {% endblock %}

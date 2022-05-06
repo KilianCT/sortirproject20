@@ -7,7 +7,9 @@
 
     {{ include('sortie/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('home') }}">Retour sur les sorties</a>
+    <form method="GET" action="{{ path('app_ville_index') }}" >
+        <button style="color: cornflowerblue;" class="btn" >retour a la liste</button>
+    </form>
 
     {{ include('sortie/_delete_form.html.twig') }}
 {% endblock %}

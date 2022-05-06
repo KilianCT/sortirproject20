@@ -21,7 +21,9 @@
                 <td>{{ ville.nomVille }}</td>
                 <td>{{ ville.codePostal }}</td>
                 <td>
-                    <a href="{{ path('app_ville_edit', {'id': ville.id}) }}">modifier</a>
+                    <form method="post" action="{{ path('app_ville_edit', {'id': ville.id}) }}" >
+                        <button style="color: orange;" class="btn" >Modifier</button>
+                    </form>
                     {{ include('ville/_delete_form.html.twig') }}
                 </td>
             </tr>
@@ -33,7 +35,12 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_ville_new') }}">Nouvelle ville</a>
-    <br>
-    <a href="{{ path('home') }}">Retour a l'accueil</a>
+    <form method="POST" action="{{ path('app_ville_new') }}" >
+        <button style="color: greenyellow;" class="btn" >Nouvelle ville</button>
+    </form>
+
+    <form method="GET" action="{{ path('home') }}" >
+        <button style="color: cornflowerblue;" class="btn" >Accueil</button>
+    </form>
+
 {% endblock %}

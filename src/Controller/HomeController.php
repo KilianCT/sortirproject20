@@ -26,6 +26,10 @@ class HomeController  extends AbstractController
     {
             $sites = $sitesRepository->findAll();
             $sorties = $sortieRepository->findAll();
+
+        $sql = " SELECT * FROM `sortie` ORDER BY `sortie`.`date_heure_debut` DESC";
+        
+
         $date = date_create('now');
         setlocale(LC_TIME, 'fra_fra');
         $dateAfficher =  strftime('%d %B %Y | %H:%M:%S');
@@ -138,6 +142,8 @@ class HomeController  extends AbstractController
         //  }
 
 
+        $AnnulerRecherche = false;
+        $rechercher = true;
         return $this->render('main/home.html.twig', [
             'sorties' => $sorties,
             'sites' => $sites,
@@ -146,6 +152,8 @@ class HomeController  extends AbstractController
             'isNotInscrit' => false,
             'isSortiePasse' => false,
             'dateAfficher' => $dateAfficher,
+            'AnnulerRecherche' => $AnnulerRecherche,
+            'rechercher' => $rechercher,
         ]);
 
     }
@@ -211,7 +219,8 @@ class HomeController  extends AbstractController
         $sorties = $sortiesApresFiltre2;
 
         ##dd($sortiesApresFiltre, $sortiesApresFiltre2);
-
+        $AnnulerRecherche = true;
+        $rechercher = false;
         return $this->render('main/home.html.twig', [
             'sorties' => $sorties,
             'sites' => $sites,
@@ -224,6 +233,8 @@ class HomeController  extends AbstractController
             'dateMax' => $dateMax,
             'siteChoisi' => $siteChoisi,
             'dateAfficher' => $dateAfficher,
+            'AnnulerRecherche' => $AnnulerRecherche,
+            'rechercher' => $rechercher,
         ]);
 
 

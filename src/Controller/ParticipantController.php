@@ -62,6 +62,8 @@ class ParticipantController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             $participant->setAdministrateur(false);
             $participant->setActif(true);
             $participant->setPassword($userPasswordHasher->hashPassword($participant, $participant->getPassword()));

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Se connecter{% endblock %}
 
 {% block main %}
 
@@ -14,14 +14,14 @@
 
         {% if app.user %}
             <div class="mb-3">
-                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                Tu est connecter avec {{ app.user.username }}, <a href="{{ path('app_logout') }}">Déconnection</a>
             </div>
         {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal text-light">Please sign in</h1>
-        <label for="inputEmail">Email</label>
+        <h1 class="h3 mb-3 font-weight-normal text-light">Connection</h1>
+        <label for="inputEmail">Email :</label>
         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-        <label for="inputPassword">Password</label>
+        <label for="inputPassword">Mot de passe :</label>
         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
         <input type="hidden" name="_csrf_token"
@@ -33,13 +33,13 @@
 
             <div class="checkbox mb-3">
                 <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
+                    <input type="checkbox" name="_remember_me"> Se souvenir de moi
                 </label>
             </div>
 
 
         <button class="btn btn-lg" type="submit" style="background-image: url(https://v-georgia.com/wp-content/uploads/2016/05/zakat_batumi1-858x503.jpg);color: white;">
-            Sign in
+           Se connecter
         </button>
     </form>
     </div>

@@ -3,10 +3,12 @@
 {% block title %}modifier Ville{% endblock %}
 
 {% block main %}
-    <h1>modifie la Ville</h1>
+    <h1>modifier la Ville</h1>
 
     {{ include('ville/_form.html.twig', {'button_label': 'modifier'}) }}
 
-    <a href="{{ path('app_ville_index') }}">retour a la liste</a>
 
+    <form method="GET" action="{{ path('app_ville_index') }}" >
+        <button style="color: cornflowerblue;" class="btn" >retour a la liste</button>
+    </form>
 {% endblock %}

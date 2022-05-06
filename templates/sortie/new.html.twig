@@ -30,5 +30,9 @@
     <button type="submit" class="btn btn-success mt-2">Enregistrer</button>
 
     {{ form_end(form) }}
-    <a href="{{ path('home') }}">Retour sur les sorties</a>
+
+    <form method="GET" action="{{ path('home') }}" >
+        <button style="color: cornflowerblue;" class="btn" >Accueil</button>
+    </form>
+
 {% endblock %}
