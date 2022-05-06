@@ -39,12 +39,11 @@
                     <option {% if siteChoisi is defined and siteChoisi == site.getId() %}selected{% endif %}   value="{{site.getId()}}"> {{ site.getNomSite()}}</option>
                 {% endfor %}
             </select>
-            {%if rechercher == true%}
             <button type="submit" class="btn" style="color: white; margin: 0">Rechercher</button>
-            {% endif%}
-            {%if AnnulerRecherche == true%}
-            <button onclick="rtn()" class="btn" style="color: white; margin: 0">Annuler la Recherche</button>
-           {% endif %}
+            {% if siteChoisi is defined %}
+                <a href="{{path('home') }}">
+                    <button type="button" class="btn" style="color: white; margin: 0">Annuler la Recherche</button>
+                </a>{% endif %}
             <script>
                 function rtn() {
                     window.history.back();
